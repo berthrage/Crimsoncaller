@@ -1,0 +1,63 @@
+from GameWindow import *
+from multiprocessing import Process
+import threading
+import time
+
+class Input:
+
+    mouseButtonPressed = {
+        1: False, #LEFTCLICK
+        2: False, #MIDDLECLICK
+        3: False, #RIGHTCLICK
+        4: False, #SCROLLUP
+        5: False #SCROLLDOWN
+    }
+
+    keyPressed = {
+        "ESC": False,
+        "UP": False,
+        "DOWN": False,
+        "SPACE": False,
+        "w": False,
+        "s": False,
+        "a": False,
+        "d": False,
+        "e": False
+    }
+
+    @staticmethod
+    def getMouseButtonDown(mouseButton):
+
+        if(GameWindow.mouse.is_button_pressed(mouseButton) and not Input.mouseButtonPressed[mouseButton]):
+            Input.mouseButtonPressed[mouseButton] = True
+            thread2 = threading.Thread(target=Input.checkMouseClick, args=(mouseButton,))
+            thread2.daemon = True
+            thread2.start()
+            return True
+
+        return False
+
+    @staticmethod
+    def getKeyDown(keyButton):
+        if (GameWindow.keyboard.key_pressed(keyButton) and not Input.keyPressed[keyButton]):
+            Input.keyPressed[keyButton] = True
+            thread3 = threading.Thread(target=Input.checkKeyPress, args=(keyButton,))
+            thread3.daemon = True
+            thread3.start()
+            return True
+
+        return False
+
+    @staticmethod
+    def checkMouseClick(mouseButton):
+        while True:
+            if(not GameWindow.mouse.is_button_pressed(mouseButton)):
+                Input.mouseButtonPressed[mouseButton] = False
+                break
+
+    @staticmethod
+    def checkKeyPress(keyButton):
+        while True:
+            if(not GameWindow.keyboard.key_pressed(keyButton)):
+                Input.keyPressed[keyButton] = False
+                break
