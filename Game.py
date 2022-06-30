@@ -3,6 +3,7 @@ from Input import *
 from Levels import *
 from Player import *
 from Devotee import *
+from Warrior import *
 import MainMenu
 
 class Game:
@@ -14,17 +15,23 @@ class Game:
     frameRate = 0
     currentLevel = Level1area1
 
+    devotee1 = Devotee()
+    warrior1 = Warrior()
     @staticmethod
     def executeGame():
         while True:
             GameWindow.window.set_background_color(Game.windowColor)
             Input.inputHandler()
-            devotee1 = Devotee()
 
             Levels.Levels.spawnLevel(Game.currentLevel)
-            devotee1.spawn()
+            if Game.warrior1.health > 0:
+                Game.warrior1.update_sprite()
+                Warrior.combat(Game.warrior1)
             Player.spawnJulius()
             Player.controlJulius(Game.currentLevel)
+            if Game.devotee1.health > 0:
+                Game.devotee1.update_sprite()
+                Devotee.collision(Game.devotee1)
             Game.backtoMainMenu()
             #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(JuliusAnim.idle1_right), 20, 60, 30, [255, 255, 255], "Arial")
@@ -39,6 +46,7 @@ class Game:
             #GameWindow.window.draw_text(str(Player.jumpSpeedDivision), 20, 150, 30, [255, 255, 255], "Arial")
 
             GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(str(Game.devotee1.ready), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
             GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(Player.sprite.mask.get_size()), 20, 130, 30, [255, 255, 255], "Arial")
