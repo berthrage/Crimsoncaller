@@ -25,6 +25,7 @@ class MainMenu:
             Misc.menuSelected = MainMenu.name
             Misc.inMenu = True
             GameWindow.window.set_background_color(MainMenu.windowColor)
+            Input.inputHandler()
 
             #GameWindow.window.draw_text(str(Input.keyPressed["w"]), 20, 20, 30, [255, 255, 255], "Arial")
             MenuSprites.logo.set_position(MainMenu.logoPosition['x'], MainMenu.logoPosition['y'])

@@ -2,6 +2,7 @@ from GameWindow import GameWindow
 from Input import *
 from Levels import *
 from Player import *
+from Devotee import *
 import MainMenu
 
 class Game:
@@ -11,20 +12,46 @@ class Game:
     timeElapsed = 0
     gameLoops = 0
     frameRate = 0
+    currentLevel = Level1area1
 
     @staticmethod
     def executeGame():
         while True:
             GameWindow.window.set_background_color(Game.windowColor)
+            Input.inputHandler()
+            devotee1 = Devotee()
 
-
-            Levels.spawnLevel(Level1area1)
+            Levels.Levels.spawnLevel(Game.currentLevel)
+            devotee1.spawn()
             Player.spawnJulius()
-            Player.controlJulius()
+            Player.controlJulius(Game.currentLevel)
             Game.backtoMainMenu()
             #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(JuliusAnim.idle1_right), 20, 60, 30, [255, 255, 255], "Arial")
            # GameWindow.window.draw_text(str(JuliusAnim.idle1_left), 20, 90, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Level1area1.reachedLimitLeft), 20, 90, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Level1area1.reachedLimitRight), 20, 110, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Level1area1.tiles.x), 20, 130, 30, [255, 255, 255], "Arial")
+
+            #GameWindow.window.draw_text(str(Player.jumping), 20, 90, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Player.jumpingTimer.time), 20, 110, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Player.jumpSpeed), 20, 130, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Player.jumpSpeedDivision), 20, 150, 30, [255, 255, 255], "Arial")
+
+            GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Player.sprite.mask.get_size()), 20, 130, 30, [255, 255, 255], "Arial")
+            #Player.sprite.mask = pygame.mask.from_surface(Player.sprite.image, 127)
+            #olist = Player.sprite.mask.outline()
+            #olist2 = Level1area1.tiles.mask.outline()
+
+            #pygame.draw.lines(Player.sprite.image, (255,0,0), True, olist)
+            #pygame.draw.lines(Level1area1.tiles.image, (255, 255, 255), True, olist2)
+
+
+
+
             Game.showFrameRate()
             GameWindow.window.update()
 

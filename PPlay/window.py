@@ -1,3 +1,5 @@
+# coding= utf-8
+
 # Pygame and system modules
 import sys
 import pygame
@@ -55,7 +57,7 @@ class Window():
     # blit (transfer, see pygame doc) to the new FSCREEN
     def set_fullscreen(self):
         Window.screen = pygame.display.set_mode([self.width, self.height], pygame.FULLSCREEN)
-
+    # TODO
 
     """Not implemented yet - Disable the full display mode"""
     # Yeah.. guess what..
@@ -148,10 +150,15 @@ class Window():
                          [Italic]]]]
     """
     def draw_text(self, text, x, y, size=12, color=(0,0,0),
-                 font_name="Arial", bold=False, italic=False):
+                 font_name="Arial", bold=False, italic=False, sysfont=True):
         # Creates a Font from the system fonts
         # SysFont(name, size, bold=False, italic=False) -> Font
-        font = pygame.font.SysFont(font_name, size, bold, italic)
+        if(sysfont):
+            font = pygame.font.SysFont(font_name, size, bold, italic)
+        else:
+            font = pygame.font.Font(font_name, size)
+            font.bold = bold
+            font.italic = italic
 
         # Creates a pygame.Surface with the text rendered on it
         # render(text, antialias, color, background=None)->Surface

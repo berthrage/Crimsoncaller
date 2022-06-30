@@ -1,3 +1,5 @@
+# coding= utf-8
+
 # Modules
 import sys
 import time
@@ -15,7 +17,6 @@ class Sprite(animation.Animation):
     Caso seja dado apenas o nome da imagem, será criada uma Animation
     com 1 frame apenas.
     """
-
     def __init__(self, image_file, frames=1):
         # Parent's constructor must be first-called
         animation.Animation.__init__(self, image_file, frames)

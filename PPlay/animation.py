@@ -1,3 +1,5 @@
+# coding= utf-8
+
 # Pygame and System Modules
 import sys
 import time
@@ -74,7 +76,7 @@ class Animation(gameimage.GameImage):
     #-----------------------DRAW&UPDATE METHODS--------------------
     """Method responsible for performing the change of frames."""
     def update(self):
-        if(self.playing):
+        if(self.playing and self.total_frames > 1):
             time_ms = int(round(time.time() * 1000)) #gets the curr time in ms
             if((time_ms - self.last_time > self.frame_duration[self.curr_frame])
                and (self.final_frame != 0)):
@@ -91,18 +93,17 @@ class Animation(gameimage.GameImage):
     def draw(self):
         if(self.drawable):
             # Clips the frame (rect on the image)
-            clip_rect = Rect(self.curr_frame*self.width,
-                             0,
-                             self.width,
-                             self.height
-                             )
+            clip_rect = pygame.Rect(self.curr_frame*self.width,
+                                    0,
+                                    self.width,
+                                    self.height
+                                    )
 
-            window.Window.get_screen().blit(
-                self.image,
-                pygame.Rect(self.x, self.y, self.width, self.height),
-                area=clip_rect
-                )
-            
+            # Updates the pygame rect based on new positions values
+            self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+            # Blits the image with the rect and clip_rect clipped
+            window.Window.get_screen().blit(self.image, self.rect, area=clip_rect)
         
     
     #----------------------PLAYING CONTROL METHODS----------------------

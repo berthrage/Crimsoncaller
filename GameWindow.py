@@ -8,6 +8,7 @@ from Misc import  *
 
 
 class GameWindow:
+
     window = Window(1280, 720)
     keyboard = window.get_keyboard()
     mouse = window.get_mouse()
