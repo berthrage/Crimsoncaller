@@ -1,3 +1,4 @@
+import GameWindow
 from PPlay.sprite import *
 from Player import *
 from Enemy import *
@@ -41,6 +42,8 @@ class Guerreiro(Enemy):
 
         self.showHealthGuerreiro()
         self.moveAccordingLevelScrollingGuerreiro()
+        self.combat()
+        self.kill()
 
 
         if self.health > 0:
@@ -90,14 +93,30 @@ class Guerreiro(Enemy):
                     self.attacking = False
 
     def showHealthGuerreiro(self):
+
+
         if (self.mostrarHealth):
-            GameWindow.window.draw_text('-10', self.image.x, self.image.y, 90, [255, 0, 0],
-                                        "fonts/AncientModernTales.ttf", False, False, False)
             self.mostrarHealthTimer.resumeTimer()
             self.mostrarHealthTimer.executeTimer()
 
-            if (self.mostrarHealthTimer.time >= 0.5):
+
+            if (self.show):
+                GameWindow.window.draw_text('-10', self.image.x, self.image.y - 50, 60, [255, 0, 0],
+                                            "fonts/AncientModernTales.ttf", False, False, False)
+
+
+            if(self.mostrarHealthTimer.time > self.step):
+                if(self.show):
+                    self.show = False
+                else:
+                    self.show = True
+                self.step += self.increment
+
+
+
+            if (self.mostrarHealthTimer.time >= self.interval):
                 self.mostrarHealth = False
+                self.step = self.increment
                 self.mostrarHealthTimer.stopTimer()
                 self.mostrarHealthTimer.resetTimer()
 
@@ -118,5 +137,9 @@ class Guerreiro(Enemy):
             if not Player.attacking:
                 self.ready = True
         
-        if self.attacking and self.image.collided_perfect(Player.sprite):
+        if self.attacking and self.image.collided_perfect(Player.sprite) and self.ready2:
             Player.health -= 25
+            self.ready2 = False
+
+        elif not self.attacking:
+            self.ready2 = True

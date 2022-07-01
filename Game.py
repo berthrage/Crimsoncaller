@@ -33,7 +33,7 @@ class Game:
             devotee1.spawn(100, 465)
             devotee2.spawn(600, 465)
 
-            devotee1.move()
+            #devotee1.move()
 
 
             Player.spawnJulius()
@@ -44,11 +44,13 @@ class Game:
                 Warrior.combat(Game.warrior1) """
 
             guerreiro1.update_sprite()
-            guerreiro1.combat()
+
 
             '''if Game.devotee1.health > 0:
                 Game.devotee1.update_sprite()
                 Devotee.collision(Game.devotee1)'''
+
+            #print(guerreiro1.image.collided_perfect(devotee1.image))
 
             Game.backtoMainMenu()
             #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")

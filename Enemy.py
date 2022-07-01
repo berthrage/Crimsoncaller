@@ -15,12 +15,20 @@ class Enemy():
 
         self.walking = False
         self.attacking = False
+        self.dead = False
+
+        self.interval = 0.5
+        self.increment = 0.05
+        self.step = 0.05
+        self.show = True
+
 
     def spawn(self, positionX, positionY):
         self.sprite.draw()
         self.sprite.update()
         self.moveAccordingLevelScrolling()
         self.collision()
+        self.kill()
         self.showHealth()
 
         if (not self.posSet):
@@ -61,4 +69,8 @@ class Enemy():
                 self.mostrarHealth = False
                 self.mostrarHealthTimer.stopTimer()
                 self.mostrarHealthTimer.resetTimer()
+
+    def kill(self):
+        if(self.health <= 0):
+            self.dead = True
 
