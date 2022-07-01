@@ -126,12 +126,12 @@ class Player:
         JuliusAnim.setAnims()
 
         if(not Player.still and Player.direction == 2 and Player.standing):
-            if(Player.sprite.x < Level.scrollingLimit or Level.reachedLimitRight):
+            if(Player.sprite.x < Level.scrollingLimit + 1 or Level.reachedLimitRight):
                 Player.sprite.x += Player.walkSpeed * GameWindow.window.delta_time()
 
 
         elif(not Player.still and Player.direction == 1 and Player.standing):
-            if(Player.sprite.x > Level.scrollingLimit or Level.reachedLimitLeft):
+            if(Player.sprite.x > Level.scrollingLimit - 1 or Level.reachedLimitLeft):
                 Player.sprite.x -= Player.walkSpeed * GameWindow.window.delta_time()
 
 
@@ -181,6 +181,7 @@ class Player:
 
             Player.falling = True
         else:
+            #layer.sprite.y += 20
             Player.fallSpeed = Player.tempFallSpeed
             Player.falling = False
 

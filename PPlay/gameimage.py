@@ -34,6 +34,7 @@ class GameImage(gameobject.GameObject):
         self.image = pygame.image.load(image_file).convert_alpha()
         # Gets the image pygame.Rect
         self.rect = self.image.get_rect()
+
         
         # Size
         self.width = self.rect.width
