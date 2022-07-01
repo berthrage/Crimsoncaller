@@ -1,19 +1,20 @@
-from PPlay.sprite import *
+""" from PPlay.sprite import *
 from Player import *
 
 class Warrior:
     def __init__(self, health = 100):
         self.health = health
         self.sprites = []
-        self.sprites.append(Sprite("sprites/enemies/warrior/warrior01.png"))
-        self.sprites.append(Sprite("sprites/enemies/warrior/warrior02.png"))
-        self.sprites.append(Sprite("sprites/enemies/warrior/warrior03.png"))
-        self.sprites.append(Sprite("sprites/enemies/warrior/warrior04.png"))
-        self.sprites.append(Sprite("sprites/enemies/warrior/warrior05.png"))
+        self.sprites.append(Sprite("sprites/enemies/warrior1/warrior01.png"))
+        self.sprites.append(Sprite("sprites/enemies/warrior1/warrior02.png"))
+        self.sprites.append(Sprite("sprites/enemies/warrior1/warrior03.png"))
+        self.sprites.append(Sprite("sprites/enemies/warrior1/warrior04.png"))
+        self.sprites.append(Sprite("sprites/enemies/warrior1/warrior05.png"))
         self.atual = 0
         self.image = self.sprites[self.atual]
         self.image.set_position(900, 440)
         self.ready = True
+        self.walking = False
 
     def update_sprite(self):
         if self.health > 0:
@@ -37,4 +38,4 @@ class Warrior:
             print('dano')
         else:
             if not Player.attacking:
-                self.ready = True
+                self.ready = True """

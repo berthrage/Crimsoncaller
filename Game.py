@@ -4,6 +4,7 @@ from Levels import *
 from Player import *
 from Devotee import *
 from Warrior import *
+from Guerreiro import *
 import MainMenu
 
 class Game:
@@ -16,7 +17,8 @@ class Game:
     currentLevel = Level1area1
 
     devotee1 = Devotee()
-    warrior1 = Warrior()
+    #warrior1 = Warrior()
+    guerreiro1 = Guerreiro()
     @staticmethod
     def executeGame():
         while True:
@@ -24,14 +26,19 @@ class Game:
             Input.inputHandler()
 
             Levels.Levels.spawnLevel(Game.currentLevel)
-            if Game.warrior1.health > 0:
+
+            """ if Game.warrior1.health > 0:
                 Game.warrior1.update_sprite()
-                Warrior.combat(Game.warrior1)
+                Warrior.combat(Game.warrior1) """
+
+            Game.guerreiro1.update_sprite()
+            Guerreiro.combat(Game.guerreiro1)
+
             Player.spawnJulius()
             Player.controlJulius(Game.currentLevel)
-            if Game.devotee1.health > 0:
+            '''if Game.devotee1.health > 0:
                 Game.devotee1.update_sprite()
-                Devotee.collision(Game.devotee1)
+                Devotee.collision(Game.devotee1)'''
             Game.backtoMainMenu()
             #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(JuliusAnim.idle1_right), 20, 60, 30, [255, 255, 255], "Arial")
