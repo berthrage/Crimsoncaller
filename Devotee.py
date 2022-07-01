@@ -1,6 +1,8 @@
 from PPlay.sprite import *
+from PPlay.collision import *
 from Enemy import *
 from GameWindow import *
+import Player as Pl
 import Game
 
 class Devotee(Enemy):

@@ -5,6 +5,7 @@ import Player
 
 class Levels:
 
+
     @staticmethod
     def spawnLevel(Level):
         Level.background.draw()
