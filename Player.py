@@ -1,3 +1,4 @@
+from Animations import AnimatedSprite
 import Levels
 from PPlay.sprite import *
 from PPlay.gameobject import *
@@ -16,6 +17,8 @@ class Player:
     sliding = False
     slidingTimer = Misc.Timer()
     jumping = False
+    freeFalling = False
+    freeFallingTimer = Misc.Timer()
     falling = False
     grounded = False
     jumpingTimer = Misc.Timer()
@@ -24,8 +27,12 @@ class Player:
     attackOffCooldown = True
     attackingTimer = Misc.Timer()
     attackCooldownTimer = Misc.Timer()
+    groundLevelY = 0
+    groundLevelX = 0
+    collidedGround = False
+    collidedWall = False
 
-    sprite = Sprite("sprites/player/right/julius-idle1-right.png", 15)
+    sprite = Sprite("sprites/player/right/julius-idle/1.png")
     sprite.set_sequence_time(0, 14, 80, True)
     levelGroundFloor = 465
     sprite.set_position(200, 0)
@@ -42,9 +49,9 @@ class Player:
 
 
     @staticmethod
-    def spawnJulius():
-        Player.sprite.draw()
-        Player.sprite.update()
+    def spawnJulius(): pass
+        #Player.sprite.draw()
+        #Player.sprite.update()
 
         #Julius.setGravity()
         #Julius.sprite.mask.scale((800, 900))
@@ -73,7 +80,7 @@ class Player:
 
 
 
-        if(not Player.standing and not Player.jumping and not Player.falling and Input.getKeyDown("SPACE")):
+        if(not Player.standing and not Player.jumping and not Player.freeFalling and not Player.falling and Input.getKeyDown("SPACE")):
             Player.sliding = True
 
         if(Player.sliding):
@@ -86,7 +93,7 @@ class Player:
                 Player.slidingTimer.resetTimer()
 
 
-        if(not Player.attacking and not Player.falling and Input.getKeyDown("SPACE")):
+        if(not Player.attacking and not Player.freeFalling and not Player.falling and Input.getKeyDown("SPACE")):
             Player.jumping = True
         if (Player.jumping):
             Player.jumpingTimer.resumeTimer()
@@ -123,17 +130,38 @@ class Player:
                 Player.attackCooldownTimer.stopTimer()
                 Player.attackCooldownTimer.resetTimer()
 
-        JuliusAnim.setAnims()
+        #JuliusAnim.setAnims()
+        JuliusAnim.setAnims2()
 
-        if(not Player.still and Player.direction == 2 and Player.standing):
+        if (Player.groundLevelX >= 6):
+            Player.sprite.x -= 2000 * GameWindow.window.delta_time()
+        if (Player.groundLevelX <= - 6):
+            Player.sprite.x += 2000 * GameWindow.window.delta_time()
+        if(Player.groundLevelX >= 5):
+            Player.collidedWall = True
+        else:
+            Player.collidedWall = False
+
+        ## WALKING
+        if(not Player.still and Player.direction == 2 and Player.standing and not Player.collidedWall):
             if(Player.sprite.x < Level.scrollingLimit + 1 or Level.reachedLimitRight):
                 Player.sprite.x += Player.walkSpeed * GameWindow.window.delta_time()
 
 
-        elif(not Player.still and Player.direction == 1 and Player.standing):
+
+                if (Player.sprite.collided_perfect(Level1area1.tiles)):
+                    Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
+
+
+        elif(not Player.still and Player.direction == 1 and Player.standing and not Player.collidedWall):
             if(Player.sprite.x > Level.scrollingLimit - 1 or Level.reachedLimitLeft):
                 Player.sprite.x -= Player.walkSpeed * GameWindow.window.delta_time()
 
+                if (Player.sprite.collided_perfect(Level1area1.tiles)):
+                    Player.groundLevelX -= Player.walkSpeed * GameWindow.window.delta_time()
+
+        if(not Player.sprite.collided_perfect(Level1area1.tiles)):
+            Player.groundLevelX = 0
 
         if(Player.sliding and Player.direction == 2):
             if (Player.sprite.x < Level.scrollingLimit or Level.reachedLimitRight):
@@ -175,17 +203,51 @@ class Player:
         #if(not pygame.sprite.collide_mask(Levels.Level1area1.tiles, Player.sprite)):
         #Player.sprite.y < Player.levelGroundFloor and not Player.jumping
 
-        if(Player.sprite.y < Player.levelGroundFloor and not Player.jumping):
+        if(Player.falling):
+            Player.freeFallingTimer.resumeTimer()
+            Player.freeFallingTimer.executeTimer()
+
+            if(Player.freeFallingTimer.time >= 0.1):
+                Player.freeFalling = True
+
+                Player.freeFallingTimer.stopTimer()
+                Player.freeFallingTimer.resetTimer()
+        else:
+            Player.freeFalling = False
+
+            Player.freeFallingTimer.stopTimer()
+            Player.freeFallingTimer.resetTimer()
+
+        if(not Player.still and Player.grounded and Player.sprite.collided_perfect(Level1area1.tiles) and Player.groundLevelY < 5 and not Player.collidedWall):
+            Player.sprite.y -= 1000 * GameWindow.window.delta_time()
+            Player.groundLevelY += 300 * GameWindow.window.delta_time()
+
+        else:
+            Player.groundLevelY = 0
+
+
+        """if(not Player.still and Player.grounded and Player.sprite.collided_perfect(Level1area1.tiles)):
+            Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
+        else:
+            Player.groundLevelX = 0"""
+
+        if(Player.sprite.rect.bottom >= Level1area1.tiles.rect.top):
+            Player.collidedGround = True
+        else:
+            Player.collidedGround = False
+
+
+        if((not Level1area1.tiles.collided_perfect(Player.sprite) and not Player.jumping) or Player.groundLevelY > 5):
             Player.sprite.y += Player.fallSpeed * GameWindow.window.delta_time()
-            Player.fallSpeed += 800 * GameWindow.window.delta_time()
+            Player.fallSpeed += 200 * GameWindow.window.delta_time()
 
             Player.falling = True
         else:
-            #layer.sprite.y += 20
             Player.fallSpeed = Player.tempFallSpeed
             Player.falling = False
 
-        if(Player.falling or Player.jumping):
+
+        if((Player.falling and Player.freeFalling) or Player.jumping):
             Player.grounded = False
         else:
             Player.grounded = True
@@ -273,6 +335,53 @@ class JuliusAnim():
         "attackair_left_animChanged": False,
     }
 
+
+    animLists = {
+        "idle1_right": [],
+        "idle1_right_animChanged": False,
+        "idle1_left": [],
+        "idle1_left_animChanged": False,
+    }
+
+    animatedSprites = []
+
+    idleAnim = AnimatedSprite()
+    idleAnim.addSprite("sprites/player/right/julius-idle", 15)
+    animatedSprites.append(idleAnim)
+
+    walkAnimation = AnimatedSprite()
+    walkAnimation.addSprite("sprites/player/right/julius-walk", 16)
+    animatedSprites.append(walkAnimation)
+
+    duckAnim = AnimatedSprite()
+    duckAnim.addSprite("sprites/player/right/julius-duck", 8)
+    animatedSprites.append(duckAnim)
+
+    slideAnim = AnimatedSprite()
+    slideAnim.addSprite("sprites/player/right/julius-slide", 11)
+    animatedSprites.append(slideAnim)
+
+    fallAnim = AnimatedSprite()
+    fallAnim.addSprite("sprites/player/right/julius-fall", 10)
+    animatedSprites.append(fallAnim)
+
+    jumpAnim = AnimatedSprite()
+    jumpAnim.addSprite("sprites/player/right/julius-jump", 2)
+    animatedSprites.append(jumpAnim)
+
+    jumpStillAnim = AnimatedSprite()
+    jumpStillAnim.addSprite("sprites/player/right/julius-jumpstill", 2)
+    animatedSprites.append(jumpStillAnim)
+
+    attackAnim = AnimatedSprite()
+    attackAnim.addSprite("sprites/player/right/julius-attack", 7)
+    animatedSprites.append(attackAnim)
+
+    attackAirAnim = AnimatedSprite()
+    attackAirAnim.addSprite("sprites/player/right/julius-attackair", 7)
+    animatedSprites.append(attackAirAnim)
+
+
     lockAttackAnim = False
 
     @staticmethod
@@ -280,7 +389,7 @@ class JuliusAnim():
         if (Player.still and
                 Player.standing and
                 not Player.jumping and
-                not Player.falling and
+                not Player.freeFalling and
                 not Player.attacking and
                 Player.direction == direction):
             return True
@@ -292,7 +401,7 @@ class JuliusAnim():
         if (not Player.still and
                 Player.standing and
                 not Player.jumping and
-                not Player.falling and
+                not Player.freeFalling and
                 not Player.attacking and
                 Player.direction == direction):
             return True
@@ -304,7 +413,7 @@ class JuliusAnim():
         if (not Player.standing and
                 not Player.sliding and
                 not Player.jumping and
-                not Player.falling and
+                not Player.freeFalling and
                 not Player.attacking and
                 Player.direction == direction):
             return True
@@ -316,7 +425,6 @@ class JuliusAnim():
         if (not Player.standing and
                 Player.sliding and
                 not Player.jumping and
-                not Player.falling and
                 not Player.attacking and
                 Player.direction == direction):
             return True
@@ -342,7 +450,7 @@ class JuliusAnim():
                 not Player.still and
                 not Player.sliding and
                 Player.jumping and
-                not Player.falling and
+                not Player.freeFalling and
                 not Player.attacking and
                 Player.direction == direction):
             return True
@@ -354,7 +462,7 @@ class JuliusAnim():
         if (Player.standing and
                 not Player.sliding and
                 not Player.jumping and
-                Player.falling and
+                Player.freeFalling and
                 not Player.attacking and
                 Player.direction == direction):
             return True
@@ -391,6 +499,78 @@ class JuliusAnim():
     @staticmethod
     def changeAnim():
         pass
+
+    @staticmethod
+    def setAnims2():
+
+        if (JuliusAnim.idling(2)):
+            JuliusAnim.idleAnim.playAnimation(Player.sprite, 15, JuliusAnim.animatedSprites)
+
+            # JuliusAnim.idle1_right = False
+        elif (JuliusAnim.idling(1)):
+            JuliusAnim.idleAnim.playAnimationFlipped(Player.sprite, 15, JuliusAnim.animatedSprites)
+
+            # JuliusAnim.idle1_left = False
+        elif (JuliusAnim.walking(2)):
+            JuliusAnim.walkAnimation.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.walking(1)):
+            JuliusAnim.walkAnimation.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.ducking(2)):
+            JuliusAnim.duckAnim.playAnimation(Player.sprite, 14, JuliusAnim.animatedSprites, False)
+
+        elif (JuliusAnim.ducking(1)):
+            JuliusAnim.duckAnim.playAnimationFlipped(Player.sprite, 14, JuliusAnim.animatedSprites, False)
+
+        elif (JuliusAnim.sliding(2)):
+            JuliusAnim.slideAnim.playAnimation(Player.sprite, 24, JuliusAnim.animatedSprites, False)
+
+        elif (JuliusAnim.sliding(1)):
+            JuliusAnim.slideAnim.playAnimationFlipped(Player.sprite, 24, JuliusAnim.animatedSprites, False)
+
+        elif (JuliusAnim.jumpingStill(2)):
+            JuliusAnim.jumpStillAnim.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.jumpingStill(1)):
+            JuliusAnim.jumpStillAnim.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.jumpingMoving(2)):
+            JuliusAnim.jumpAnim.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.jumpingMoving(1)):
+            JuliusAnim.jumpAnim.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.falling(2)):
+            JuliusAnim.fallAnim.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.falling(1)):
+            JuliusAnim.fallAnim.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+        elif (JuliusAnim.attackingGround(2) and not JuliusAnim.lockAttackAnim):
+            JuliusAnim.attackAnim.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+            JuliusAnim.lockAttackAnim = True
+
+        elif (JuliusAnim.attackingGround(1) and not JuliusAnim.lockAttackAnim):
+            JuliusAnim.attackAnim.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+            JuliusAnim.lockAttackAnim = True
+
+        elif (JuliusAnim.attackingAir(2)) and not JuliusAnim.lockAttackAnim:
+            JuliusAnim.attackAirAnim.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+            JuliusAnim.lockAttackAnim = True
+
+        elif (JuliusAnim.attackingAir(1) and not JuliusAnim.lockAttackAnim):
+            JuliusAnim.attackAirAnim.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+            JuliusAnim.lockAttackAnim = True
+
+        else:
+            for animation in JuliusAnim.animatedSprites:
+                if(animation.active):
+                    animation.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
+                elif(animation.activeFlipped):
+                    animation.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
+
+
 
     @staticmethod
     def setAnims():
@@ -457,6 +637,7 @@ class JuliusAnim():
             if (not JuliusAnim.lockAttackAnim):
                 JuliusAnim.changeAnimation("attackair_left", 7, 50, False)
                 JuliusAnim.lockAttackAnim = True
+
 
 
     @staticmethod
