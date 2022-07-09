@@ -131,16 +131,9 @@ class Player:
                 Player.attackCooldownTimer.resetTimer()
 
         #JuliusAnim.setAnims()
-        JuliusAnim.setAnims2()
+        JuliusAnim.animationController()
 
-        if (Player.groundLevelX >= 6):
-            Player.sprite.x -= 2000 * GameWindow.window.delta_time()
-        if (Player.groundLevelX <= - 6):
-            Player.sprite.x += 2000 * GameWindow.window.delta_time()
-        if(Player.groundLevelX >= 5):
-            Player.collidedWall = True
-        else:
-            Player.collidedWall = False
+
 
         ## WALKING
         if(not Player.still and Player.direction == 2 and Player.standing and not Player.collidedWall):
@@ -149,19 +142,18 @@ class Player:
 
 
 
-                if (Player.sprite.collided_perfect(Level1area1.tiles)):
-                    Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
+                #if (Player.sprite.collided_perfect(Level1area1.tiles)):
+                    #Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
 
 
         elif(not Player.still and Player.direction == 1 and Player.standing and not Player.collidedWall):
             if(Player.sprite.x > Level.scrollingLimit - 1 or Level.reachedLimitLeft):
                 Player.sprite.x -= Player.walkSpeed * GameWindow.window.delta_time()
 
-                if (Player.sprite.collided_perfect(Level1area1.tiles)):
-                    Player.groundLevelX -= Player.walkSpeed * GameWindow.window.delta_time()
+                #if (Player.sprite.collided_perfect(Level1area1.tiles)):
+                    #Player.groundLevelX -= Player.walkSpeed * GameWindow.window.delta_time()
 
-        if(not Player.sprite.collided_perfect(Level1area1.tiles)):
-            Player.groundLevelX = 0
+
 
         if(Player.sliding and Player.direction == 2):
             if (Player.sprite.x < Level.scrollingLimit or Level.reachedLimitRight):
@@ -195,6 +187,35 @@ class Player:
                 Player.dashSpeed -= 1000 * GameWindow.window.delta_time()
 
         Player.setGravity()
+        Player.setCollision()
+
+    @staticmethod
+    def setCollision():
+                            ## COLISAO COM AS PAREDES: ainda ta mt cru
+        if (Player.groundLevelX >= 0.03):
+            Player.sprite.x -= 1000 * GameWindow.window.delta_time()
+        #if (Player.groundLevelX <= - 6):
+            #Player.sprite.x += 2000 * GameWindow.window.delta_time()
+
+        if(Player.groundLevelX >= 0.03):
+            Player.collidedWall = True
+        else:
+            Player.collidedWall = False
+
+        if (not Player.still and Player.direction == 2 and Player.sprite.collided_perfect(Level1area1.tiles) and Player.groundLevelX < 0.03):
+                Player.groundLevelX += 1 * GameWindow.window.delta_time()
+
+        if (not Player.sprite.collided_perfect(Level1area1.tiles)):
+            Player.groundLevelX = 0
+
+                            ## COLISAO COM O CHAO: funciona ok
+        if ((not Player.still and Player.grounded and Player.sprite.collided_perfect(
+                Level1area1.tiles) and Player.groundLevelY < 0.01 and not Player.collidedWall)):
+            Player.sprite.y -= 500 * GameWindow.window.delta_time()
+            Player.groundLevelY += 1 * GameWindow.window.delta_time()
+
+        else:
+            Player.groundLevelY = 0
 
     @staticmethod
     def setGravity():
@@ -218,26 +239,9 @@ class Player:
             Player.freeFallingTimer.stopTimer()
             Player.freeFallingTimer.resetTimer()
 
-        if(not Player.still and Player.grounded and Player.sprite.collided_perfect(Level1area1.tiles) and Player.groundLevelY < 5 and not Player.collidedWall):
-            Player.sprite.y -= 1000 * GameWindow.window.delta_time()
-            Player.groundLevelY += 300 * GameWindow.window.delta_time()
 
-        else:
-            Player.groundLevelY = 0
-
-
-        """if(not Player.still and Player.grounded and Player.sprite.collided_perfect(Level1area1.tiles)):
-            Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
-        else:
-            Player.groundLevelX = 0"""
-
-        if(Player.sprite.rect.bottom >= Level1area1.tiles.rect.top):
-            Player.collidedGround = True
-        else:
-            Player.collidedGround = False
-
-
-        if((not Level1area1.tiles.collided_perfect(Player.sprite) and not Player.jumping) or Player.groundLevelY > 5):
+        if ((not Level1area1.tiles.collided_perfect(
+                Player.sprite) and not Player.jumping) or Player.groundLevelY > 0.1):
             Player.sprite.y += Player.fallSpeed * GameWindow.window.delta_time()
             Player.fallSpeed += 200 * GameWindow.window.delta_time()
 
@@ -246,102 +250,24 @@ class Player:
             Player.fallSpeed = Player.tempFallSpeed
             Player.falling = False
 
-
-        if((Player.falling and Player.freeFalling) or Player.jumping):
+        if ((Player.falling and Player.freeFalling) or Player.jumping):
             Player.grounded = False
         else:
             Player.grounded = True
 
+        """if(not Player.still and Player.grounded and Player.sprite.collided_perfect(Level1area1.tiles)):
+            Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
+        else:
+            Player.groundLevelX = 0"""
+
+        """if(Player.sprite.rect.bottom >= Level1area1.tiles.rect.top):
+            Player.collidedGround = True
+        else:
+            Player.collidedGround = False"""
+
+
 
 class JuliusAnim():
-    animPaths = {
-        "idle1_right": "sprites/player/right/julius-idle1-right.png",
-        "idle1_left": Misc.strDirectionRtoL("sprites/player/right/julius-idle1-right.png"),
-
-        "walk_right": "sprites/player/right/julius-walk-right.png",
-        "walk_left": Misc.strDirectionRtoL("sprites/player/right/julius-walk-right.png"),
-
-        "duck_right": "sprites/player/right/julius-duckstart-right2.png",
-        "duck_left": Misc.strDirectionRtoL("sprites/player/right/julius-duckstart-right2.png"),
-
-        "duckslide_right": "sprites/player/right/julius-duckslide-right2.png",
-        "duckslide_left": Misc.strDirectionRtoL("sprites/player/right/julius-duckslide-right2.png"),
-
-        "jumpmid_right": "sprites/player/right/julius-jumpmid-right.png",
-        "jumpmid_left": Misc.strDirectionRtoL("sprites/player/right/julius-jumpmid-right.png"),
-
-        "jumpmidstill_right": "sprites/player/right/julius-jumpmid-still-right.png",
-        "jumpmidstill_left": Misc.strDirectionRtoL("sprites/player/right/julius-jumpmid-still-right.png"),
-
-        "fall_right": "sprites/player/right/julius-fallstart-right.png",
-        "fall_left": Misc.strDirectionRtoL("sprites/player/right/julius-fallstart-right.png"),
-
-        "attack_right": "sprites/player/right/julius-attack-right.png",
-        "attack_left": Misc.strDirectionRtoL("sprites/player/right/julius-attack-right.png"),
-
-        "attackair_right": "sprites/player/right/julius-attackair-right.png",
-        "attackair_left": Misc.strDirectionRtoL("sprites/player/right/julius-attackair-right.png"),
-    }
-
-    anims = {
-        "idle1_right": False,
-        "idle1_right_animChanged": False,
-        "idle1_left": False,
-        "idle1_left_animChanged": False,
-
-        "walkstart_right": False,
-        "walkstart_right_animChanged": False,
-        "walkstart_left": False,
-        "walkstart_left_animChanged": False,
-
-        "walk_right": False,
-        "walk_right_animChanged": False,
-        "walk_left": False,
-        "walk_left_animChanged": False,
-
-        "duck_right": False,
-        "duck_right_animChanged": False,
-        "duck_left": False,
-        "duck_left_animChanged": False,
-
-        "duckslide_right": False,
-        "duckslide_right_animChanged": False,
-        "duckslide_left": False,
-        "duckslide_left_animChanged": False,
-
-        "jumpmid_right": False,
-        "jumpmid_right_animChanged": False,
-        "jumpmid_left": False,
-        "jumpmid_left_animChanged": False,
-
-        "jumpmidstill_right": False,
-        "jumpmidstill_right_animChanged": False,
-        "jumpmidstill_left": False,
-        "jumpmidstill_left_animChanged": False,
-
-        "fall_right": False,
-        "fall_right_animChanged": False,
-        "fall_left": False,
-        "fall_left_animChanged": False,
-
-        "attack_right": False,
-        "attack_right_animChanged": False,
-        "attack_left": False,
-        "attack_left_animChanged": False,
-
-        "attackair_right": False,
-        "attackair_right_animChanged": False,
-        "attackair_left": False,
-        "attackair_left_animChanged": False,
-    }
-
-
-    animLists = {
-        "idle1_right": [],
-        "idle1_right_animChanged": False,
-        "idle1_left": [],
-        "idle1_left_animChanged": False,
-    }
 
     animatedSprites = []
 
@@ -491,17 +417,10 @@ class JuliusAnim():
         else:
             return False
 
-    timeElapsed = 0
 
-    currentX = 0
-    currentY = 0
 
     @staticmethod
-    def changeAnim():
-        pass
-
-    @staticmethod
-    def setAnims2():
+    def animationController():
 
         if (JuliusAnim.idling(2)):
             JuliusAnim.idleAnim.playAnimation(Player.sprite, 15, JuliusAnim.animatedSprites)
@@ -571,103 +490,5 @@ class JuliusAnim():
                     animation.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
 
 
-
-    @staticmethod
-    def setAnims():
-
-        if (JuliusAnim.idling(2)):
-            JuliusAnim.changeAnimation("idle1_right", 15, 80)
-            # JuliusAnim.idle1_right = False
-        elif (JuliusAnim.idling(1)):
-            JuliusAnim.changeAnimation("idle1_left", 15, 80)
-            # JuliusAnim.idle1_left = False
-        elif (JuliusAnim.walking(2)):
-            JuliusAnim.walkAnim("right")
-
-        elif (JuliusAnim.walking(1)):
-            JuliusAnim.walkAnim("left")
-            JuliusAnim.timeElapsed += GameWindow.window.delta_time()
-
-        elif (JuliusAnim.ducking(2)):
-            JuliusAnim.changeAnimation("duck_right", 8, 70, False)
-
-        elif (JuliusAnim.ducking(1)):
-            JuliusAnim.changeAnimation("duck_left", 8, 70, False)
-
-        elif (JuliusAnim.sliding(2)):
-            JuliusAnim.changeAnimation("duckslide_right", 11, 30, False)
-
-        elif (JuliusAnim.sliding(1)):
-            JuliusAnim.changeAnimation("duckslide_left", 11, 30, False)
-
-        elif (JuliusAnim.jumpingStill(2)):
-            JuliusAnim.changeAnimation("jumpmidstill_right", 2, 70)
-
-        elif (JuliusAnim.jumpingStill(1)):
-            JuliusAnim.changeAnimation("jumpmidstill_left", 2, 70)
-
-        elif (JuliusAnim.jumpingMoving(2)):
-            JuliusAnim.changeAnimation("jumpmid_right", 2, 70)
-
-        elif (JuliusAnim.jumpingMoving(1)):
-            JuliusAnim.changeAnimation("jumpmid_left", 2, 70)
-
-        elif (JuliusAnim.falling(2)):
-            JuliusAnim.changeAnimation("fall_right", 10, 30, False)
-
-        elif (JuliusAnim.falling(1)):
-            JuliusAnim.changeAnimation("fall_left", 10, 30, False)
-
-        elif (JuliusAnim.attackingGround(2)):
-            if (not JuliusAnim.lockAttackAnim):
-                JuliusAnim.changeAnimation("attack_right", 7, 50, False)
-                JuliusAnim.lockAttackAnim = True
-
-        elif (JuliusAnim.attackingGround(1)):
-            if (not JuliusAnim.lockAttackAnim):
-                JuliusAnim.changeAnimation("attack_left", 7, 50, False)
-                JuliusAnim.lockAttackAnim = True
-
-        elif (JuliusAnim.attackingAir(2)):
-            if (not JuliusAnim.lockAttackAnim):
-                JuliusAnim.changeAnimation("attackair_right", 7, 50, False)
-                JuliusAnim.lockAttackAnim = True
-
-        elif (JuliusAnim.attackingAir(1)):
-            if (not JuliusAnim.lockAttackAnim):
-                JuliusAnim.changeAnimation("attackair_left", 7, 50, False)
-                JuliusAnim.lockAttackAnim = True
-
-
-
-    @staticmethod
-    def changeAnimation(animation, maxFrames, animTime=10, loop=True):
-        JuliusAnim.anims[animation] = True
-
-        if (JuliusAnim.anims[animation] and not JuliusAnim.anims[animation + "_animChanged"]):
-            currentX = Player.sprite.x
-            currentY = Player.sprite.y
-
-
-            if(maxFrames > 1):
-                Player.sprite = Sprite(JuliusAnim.animPaths[animation], maxFrames)
-                Player.sprite.set_sequence_time(0, maxFrames, animTime, loop)
-            else:
-                Player.sprite = Sprite(JuliusAnim.animPaths[animation])
-
-            Player.sprite.set_position(currentX, currentY)
-
-            JuliusAnim.anims[animation + "_animChanged"] = True
-            JuliusAnim.anims[animation] = False
-
-            for anim in JuliusAnim.anims:
-                if(anim != animation + "_animChanged"):
-                   JuliusAnim.anims[anim] = False
-
-    @staticmethod
-    def walkAnim(directionStr):
-        timeElapsed = 0
-        JuliusAnim.changeAnimation("walk_" + directionStr, 16, 40)
-        JuliusAnim.changeAnimation("walk_" + directionStr, 16, 40)
 
 

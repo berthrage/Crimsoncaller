@@ -87,9 +87,12 @@ class Game:
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"freefalling: {Player.freeFalling}", 20, 270, 30,
                                         [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"Player.x: {Player.sprite.x}", 20, 290, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"Player.y: {Player.sprite.y}", 20, 310, 30,
+            #GameWindow.window.draw_text(f"Player.x: {Player.sprite.x}", 20, 290, 30,
+                                        #[255, 255, 255], "Arial")
+            #eGameWindow.window.draw_text(f"Player.y: {Player.sprite.y}", 20, 310, 30,
+                                        #[255, 255, 255], "Arial")
+
+            GameWindow.window.draw_text(f"collidedWall: {Player.collidedWall}", 20, 330, 30,
                                         [255, 255, 255], "Arial")
 
             #GameWindow.window.draw_text(str(Player.sprite.mask.get_size()), 20, 130, 30, [255, 255, 255], "Arial")
