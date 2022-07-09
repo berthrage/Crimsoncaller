@@ -40,13 +40,13 @@ class Enemy():
     def move(self):
         self.sprite.x += 100 * GameWindow.window.delta_time()
 
-    def moveAccordingLevelScrolling(self):
+    def moveAccordingLevelScrolling(self, sprite):
         if (Pl.Player.direction == 2):
             if (Pl.Player.sprite.x > self.level.scrollingLimit and not Pl.Player.still and not self.level.reachedLimitRight):
-                self.sprite.x -= Pl.Player.currentSpeed * GameWindow.window.delta_time()
+                sprite.x -= Pl.Player.currentSpeed * GameWindow.window.delta_time()
         elif (Pl.Player.direction == 1):
             if (Pl.Player.sprite.x < self.level.scrollingLimit and not Pl.Player.still and not self.level.reachedLimitLeft):
-                self.sprite.x += Pl.Player.currentSpeed * GameWindow.window.delta_time()
+                sprite.x += Pl.Player.currentSpeed * GameWindow.window.delta_time()
 
     def collision(self):
         if self.sprite.collided_perfect(Pl.Player.sprite) and Pl.Player.attacking and self.ready:

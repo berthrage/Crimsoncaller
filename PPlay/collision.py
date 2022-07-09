@@ -59,10 +59,10 @@ class Collision():
         offset_x = (gameimage2.rect.left - gameimage1.rect.left)
         offset_y = (gameimage2.rect.top - gameimage1.rect.top)
         
-        mask_1 = pygame.mask.from_surface(gameimage1.image)
-        mask_2 = pygame.mask.from_surface(gameimage2.image)
+        #mask_1 = pygame.mask.from_surface(gameimage1.image)
+        #mask_2 = pygame.mask.from_surface(gameimage2.image)
         
-        if(mask_1.overlap(mask_2, (offset_x, offset_y)) != None):
+        if(gameimage1.mask.overlap(gameimage2.mask, (offset_x, offset_y)) != None):
             return True
         return False
 

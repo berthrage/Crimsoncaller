@@ -30,8 +30,8 @@ class Game:
             Input.inputHandler()
 
             Levels.spawnLevel(Game.currentLevel)
-            devotee1.spawn(100, 465)
-            devotee2.spawn(600, 465)
+            devotee1.spawnDevotee(100, 465)
+            devotee2.spawnDevotee(600, 465)
 
             #devotee1.move()
 
@@ -50,7 +50,7 @@ class Game:
                 Game.devotee1.update_sprite()
                 Devotee.collision(Game.devotee1)'''
 
-            #print(guerreiro1.image.collided_perfect(devotee1.image))
+            print(guerreiro1.image.collided_perfect(Player.sprite))
 
             Game.backtoMainMenu()
             #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")
@@ -67,15 +67,33 @@ class Game:
 
 
             GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
-            GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"falling: {Player.falling}", 20, 90, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"grounded: {Player.grounded}", 20, 110, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(str(Player.currentSpeed), 20, 130, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(str(devotee1.posSet), 20, 150, 30, [255, 255, 255], "Arial")
 
-            GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
             #GameWindow.window.draw_text(str(Game.devotee1.ready), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
-            GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(str(Level1area1.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"groundLevelY: {Player.groundLevelY}", 20, 190, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"groundLevelX: {Player.groundLevelX}", 20, 210, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(str(Player.sprite.rect.bottom), 20, 230, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(str(Player.collidedGround), 20, 250, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"freefalling: {Player.freeFalling}", 20, 270, 30,
+                                        [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(f"Player.x: {Player.sprite.x}", 20, 290, 30,
+                                        #[255, 255, 255], "Arial")
+            #eGameWindow.window.draw_text(f"Player.y: {Player.sprite.y}", 20, 310, 30,
+                                        #[255, 255, 255], "Arial")
+
+            GameWindow.window.draw_text(f"collidedWall: {Player.collidedWall}", 20, 330, 30,
+                                        [255, 255, 255], "Arial")
 
             #GameWindow.window.draw_text(str(Player.sprite.mask.get_size()), 20, 130, 30, [255, 255, 255], "Arial")
             #Player.sprite.mask = pygame.mask.from_surface(Player.sprite.image, 127)
@@ -88,6 +106,9 @@ class Game:
 
             pygame.draw.lines(Player.sprite.image, (255,0,0), True, olist)
             pygame.draw.lines(Level1area1.tiles.image, (255, 255, 255), True, olist2)"""
+
+            #outlinePlayer = Player.sprite.mask.outline()
+            #pygame.draw.lines(Player.sprite.image, (255, 0, 0), True, outlinePlayer)
 
 
 

@@ -103,7 +103,10 @@ class Animation(gameimage.GameImage):
             self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
             # Blits the image with the rect and clip_rect clipped
-            window.Window.get_screen().blit(self.image, self.rect, area=clip_rect)
+            #window.Window.get_screen().blit(self.image, self.rect, area=clip_rect)
+
+            ## BERTH NOTES: Updated to not use clip_rect due to new animation system
+            window.Window.get_screen().blit(self.image, self.rect)
         
     
     #----------------------PLAYING CONTROL METHODS----------------------
