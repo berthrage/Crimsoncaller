@@ -24,18 +24,19 @@ class Enemy():
 
 
     def spawn(self, positionX, positionY):
-        self.sprite.draw()
-        self.sprite.update()
-        self.moveAccordingLevelScrolling()
-        self.collision()
-        self.kill()
-        self.showHealth()
+        if not self.dead:
+            self.sprite.draw()
+            self.sprite.update()
+            self.moveAccordingLevelScrolling(self.sprite)
+            self.collision()
+            self.kill()
+            self.showHealth()
 
-        if (not self.posSet):
-            # self.sprite = Sprite("sprites/enemies/devotee.png", 8)
-            # self.sprite.set_sequence_time(0, 8, 40, True)
-            self.sprite.set_position(positionX, positionY)
-            self.posSet = True
+            if (not self.posSet):
+                # self.sprite = Sprite("sprites/enemies/devotee.png", 8)
+                # self.sprite.set_sequence_time(0, 8, 40, True)
+                self.sprite.set_position(positionX, positionY)
+                self.posSet = True
 
     def move(self):
         self.sprite.x += 100 * GameWindow.window.delta_time()

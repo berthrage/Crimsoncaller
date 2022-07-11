@@ -187,7 +187,7 @@ class Player:
                 Player.dashSpeed -= 1000 * GameWindow.window.delta_time()
 
         Player.setGravity()
-        Player.setCollision()
+        #Player.setCollision()
 
     @staticmethod
     def setCollision():
