@@ -201,24 +201,28 @@ class Player:
             if(Player.dashSpeed > 0):
                 Player.dashSpeed -= 1000 * GameWindow.window.delta_time()
 
+
+        Player.scrollLevel(Game.Game.currentLevel)
         Player.setGravity()
-        #Player.setCollision()
+        Player.setCollision()
 
     @staticmethod
     def setCollision():
                             ## COLISAO COM AS PAREDES: ainda ta mt cru
-        if (Player.groundLevelX >= 0.03):
-            Player.sprite.x -= 1000 * GameWindow.window.delta_time()
+        #if (Player.groundLevelX >= 0.03):
+            #Player.sprite.x -= 1000 * GameWindow.window.delta_time()
         #if (Player.groundLevelX <= - 6):
             #Player.sprite.x += 2000 * GameWindow.window.delta_time()
 
-        if(Player.groundLevelX >= 0.03):
+        if(Player.groundLevelX >= 0.03 or Player.groundLevelX < -0.03):
             Player.collidedWall = True
         else:
             Player.collidedWall = False
 
-        if (not Player.still and Player.direction == 2 and Player.sprite.collided_perfect(Level1area1.tiles) and Player.groundLevelX < 0.03):
+        if (not Player.still and Player.direction == 2 and Player.sprite.collided_perfect(Game.Game.currentLevel.tiles) and Player.groundLevelX < 0.03):
                 Player.groundLevelX += 1 * GameWindow.window.delta_time()
+        if (not Player.still and Player.direction == 1 and Player.sprite.collided_perfect(Game.Game.currentLevel.tiles) and Player.groundLevelX > -0.03):
+                    Player.groundLevelX -= 1 * GameWindow.window.delta_time()
 
         if (not Player.sprite.collided_perfect(Level1area1.tiles)):
             Player.groundLevelX = 0
@@ -279,6 +283,27 @@ class Player:
             Player.collidedGround = True
         else:
             Player.collidedGround = False"""
+
+    @staticmethod
+    def scrollLevel(Level):
+        if (Level.tiles.x >= 0):
+            Level.reachedLimitLeft = True
+        else:
+            Level.reachedLimitLeft = False
+
+        if (Level.tiles.x <= -Level.tiles.width / 2):
+            Level.reachedLimitRight = True
+        else:
+            Level.reachedLimitRight = False
+
+        if (Player.direction == 2):
+            if (Player.sprite.x > Level.scrollingLimit and not Player.still and not Player.collidedWall and not Level.reachedLimitRight):
+                Level.tiles.x -= Player.currentSpeed * GameWindow.window.delta_time()
+                Level.background.x -= (Player.currentSpeed / 2) * GameWindow.window.delta_time()
+        elif (Player.direction == 1):
+            if (Player.sprite.x < Level.scrollingLimit and not Player.still and not Player.collidedWall and not Level.reachedLimitLeft):
+                Level.tiles.x += Player.currentSpeed * GameWindow.window.delta_time()
+                Level.background.x += (Player.currentSpeed / 2) * GameWindow.window.delta_time()
 
 class JuliusAnim():
 

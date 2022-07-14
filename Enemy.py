@@ -14,9 +14,8 @@ class Enemy():
         self.level = Levels.Level1area1
         self.mostrarHealth = False
         self.mostrarHealthTimer = Misc.Timer()
-
         self.walking = False
-        self.attacking = False
+        self.attack = False
         self.dead = False
 
         self.interval = 0.5
@@ -45,10 +44,10 @@ class Enemy():
 
     def moveAccordingLevelScrolling(self, sprite):
         if (Pl.Player.direction == 2):
-            if (Pl.Player.sprite.x > self.level.scrollingLimit and not Pl.Player.still and not self.level.reachedLimitRight):
+            if (Pl.Player.sprite.x > self.level.scrollingLimit and not Pl.Player.still and not Pl.Player.collidedWall and not self.level.reachedLimitRight):
                 sprite.x -= Pl.Player.currentSpeed * GameWindow.window.delta_time()
         elif (Pl.Player.direction == 1):
-            if (Pl.Player.sprite.x < self.level.scrollingLimit and not Pl.Player.still and not self.level.reachedLimitLeft):
+            if (Pl.Player.sprite.x < self.level.scrollingLimit and not Pl.Player.still and not Pl.Player.collidedWall and not self.level.reachedLimitLeft):
                 sprite.x += Pl.Player.currentSpeed * GameWindow.window.delta_time()
 
     def collision(self):
