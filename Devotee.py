@@ -2,8 +2,8 @@ from Enemy import *
 from Animations import AnimatedSprite
 
 class Devotee(Enemy):
-    def __init__(self, direction, health=50):
-        super().__init__(health)
+    def __init__(self, positionX, positionY, direction='left', health=50):
+        super().__init__(positionX, positionY, health)
         self.health = health
         self.damage = 25
         self.sprite = Sprite("sprites/enemies/devotee2/1.png")
@@ -11,13 +11,13 @@ class Devotee(Enemy):
         self.pray = True
         self.attack = False
 
-    animatedSprites = []
+        self.animatedSprites = []
 
-    prayAnim = AnimatedSprite()
-    prayAnim.addSprite("sprites/enemies/devotee2", 8)
-    animatedSprites.append(prayAnim)
+        self.prayAnim = AnimatedSprite()
+        self.prayAnim.addSprite("sprites/enemies/devotee2", 8)
+        self.animatedSprites.append(self.prayAnim)
 
-    @staticmethod
+
     def praying(self, direction):
         if (self.direction == direction and
             self.pray):
@@ -25,10 +25,9 @@ class Devotee(Enemy):
         else:
             return False
 
-    @staticmethod
     def animationController(self):
         if not self.dead:
-            if self.praying(self,'left'):
+            if self.praying('left'):
                 self.prayAnim.playAnimation(self.sprite, 8, self.animatedSprites)
-            elif self.praying(self,'right'):
+            elif self.praying('right'):
                 self.prayAnim.playAnimationFlipped(self.sprite, 8, self.animatedSprites)

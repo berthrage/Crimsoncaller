@@ -3,6 +3,7 @@ from GameWindow import GameWindow
 from Input import *
 import Levels
 from Player import *
+import HUD
 import Warrior
 import MainMenu
 import Devotee
@@ -13,45 +14,28 @@ from Enemy import allEnemies
 class Game:
     name = "Game"
     windowColor = [15, 34, 41]
-
+    HUD = HUD.HUD()
     timeElapsed = 0
     gameLoops = 0
     frameRate = 0
-    currentLevel = Level1area1
+    currentLevel = Level1area1()
+    transitioningLevel = False
+    intervalTransitionLevel = 0.05
+    transitionLevelTimer = Misc.Timer()
+    levelToTransition = Level1area1()
+    levelToTransitionPlayerPos = [0, 0]
 
 
     @staticmethod
     def executeGame():
-        warrior1 = Warrior.Warrior('left')
-        devotee1 = Devotee.Devotee('left')
-        cerbero1 = Cerbero.Cerbero('left')
-        demon1 = Demon.Demon('left')
-        demon2 = Demon.Demon('right')
-        #allEnemies.append(devotee1)
-        allEnemies.append(demon1)
-        #allEnemies.append(warrior1)
+
 
         while True:
             GameWindow.window.set_background_color(Game.windowColor)
             Input.inputHandler()
 
-            Levels.spawnLevel(Game.currentLevel)
-
-            #warrior1.spawn(900, GameWindow.window.height - warrior1.sprite.height - 60)
-            #warrior1.animationController(warrior1)
-
-            #devotee1.spawn(GameWindow.window.width/2 - devotee1.sprite.width/2, 200)
-            #devotee1.animationController(devotee1)
-
-            demon1.spawn(900, GameWindow.window.height - demon1.sprite.height)
-            demon1.animationController(demon1)
-
-            #demon2.spawn(0, GameWindow.window.height - demon1.sprite.height)
-            #demon2.animationController(demon2)
-
-            #cerbero1.spawn(900, 480)
-            #cerbero1.animationController(cerbero1)
-
+            Game.currentLevel.spawnLevel()
+            Game.handleLevels()
             #Player.spawnJulius()
             Player.controlJulius(Game.currentLevel)
 
@@ -82,17 +66,19 @@ class Game:
             #GameWindow.window.draw_text(str(Player.jumpSpeedDivision), 20, 150, 30, [255, 255, 255], "Arial")
 
 
-            GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+
             """ GameWindow.window.draw_text(f"falling: {Player.falling}", 20, 90, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"grounded: {Player.grounded}", 20, 110, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(str(Player.currentSpeed), 20, 130, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(str(devotee1.posSet), 20, 150, 30, [255, 255, 255], "Arial") """
 
+            Game.HUD.renderHUD()
+
             #GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
             #GameWindow.window.draw_text(str(Game.devotee1.ready), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
             #GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Level1area1.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(str(Game.currentLevel.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"groundLevelY: {Player.groundLevelY}", 20, 190, 30,
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"groundLevelX: {Player.groundLevelX}", 20, 210, 30,
@@ -103,6 +89,18 @@ class Game:
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"freefalling: {Player.freeFalling}", 20, 270, 30,
                                         [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"transitionLevelTime: {Game.transitionLevelTimer.time}", 20, 290, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"transitioningLevel: {Game.transitioningLevel}", 20, 310, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"level tiles x: {Game.currentLevel.tiles.x}", 20, 330, 30,
+                                        [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(f"level bg x: {Game.currentLevel.background.x}", 20, 350, 30,
+                                        [255, 255, 255], "Arial")
+
+
+            #GameWindow.window.draw_text(f"Demon1 x: : {demon1.sprite.x}", 20, 290, 30,
+                                       # [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(f"Player.x: {Player.sprite.x}", 20, 290, 30,
                                         #[255, 255, 255], "Arial")
             #eGameWindow.window.draw_text(f"Player.y: {Player.sprite.y}", 20, 310, 30,
@@ -126,16 +124,55 @@ class Game:
             #pygame.draw.lines(Player.sprite.image, (255, 0, 0), True, outlinePlayer)
 
 
-
-
             Game.showFrameRate()
             GameWindow.window.update()
 
 
     @staticmethod
+    def handleLevels():
+        if(isinstance(Game.currentLevel, Level1area1)):
+            if(Player.sprite.x > GameWindow.window.width - 75):
+                Game.transitionLevel(0, 300)
+                if(Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.03):
+                    Game.levelToTransition = Level1area2()
+
+        elif(isinstance(Game.currentLevel, Level1area2)):
+            if(Player.sprite.x < 0):
+                Game.transitionLevel(1150, 200, -1280)
+                if (Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.03):
+                    Game.levelToTransition = Level1area1()
+
+
+    @staticmethod
+    def transitionLevel(playerX, playerY, levelX=0):
+
+        Game.transitionLevelTimer.resumeTimer()
+        Game.transitionLevelTimer.executeTimer()
+        Game.transitioningLevel = True
+        if (Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.01):
+            Game.currentLevel = Game.levelToTransition
+            Player.sprite.set_position(playerX, playerY)
+            Game.currentLevel.tiles.x = levelX
+            Game.currentLevel.background.x = levelX / 2
+
+        if (Game.transitionLevelTimer.time >= Game.intervalTransitionLevel):
+
+            Game.transitionLevelTimer.stopTimer()
+            Game.transitionLevelTimer.resetTimer()
+
+
+    @staticmethod
     def backtoMainMenu():
         if(Input.getKeyDown("ESC")):
+            #Game.currentLevel.resetLevel()
+            Game.resetGame()
             return MainMenu.MainMenu.executeMainMenu()
+
+    @staticmethod
+    def resetGame():
+        Game.currentLevel = Level1area1()
+        Player.sprite.set_position(200, 0)
+        Player.health = 100
 
     @staticmethod
     def showFrameRate():

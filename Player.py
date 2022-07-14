@@ -224,12 +224,12 @@ class Player:
         if (not Player.still and Player.direction == 1 and Player.sprite.collided_perfect(Game.Game.currentLevel.tiles) and Player.groundLevelX > -0.03):
                     Player.groundLevelX -= 1 * GameWindow.window.delta_time()
 
-        if (not Player.sprite.collided_perfect(Level1area1.tiles)):
+        if (not Player.sprite.collided_perfect(Game.Game.currentLevel.tiles)):
             Player.groundLevelX = 0
 
                             ## COLISAO COM O CHAO: funciona ok
         if ((not Player.still and Player.grounded and Player.sprite.collided_perfect(
-                Level1area1.tiles) and Player.groundLevelY < 0.01 and not Player.collidedWall)):
+                Game.Game.currentLevel.tiles) and Player.groundLevelY < 0.01 and not Player.collidedWall)):
             Player.sprite.y -= 500 * GameWindow.window.delta_time()
             Player.groundLevelY += 1 * GameWindow.window.delta_time()
 
@@ -259,7 +259,7 @@ class Player:
             Player.freeFallingTimer.resetTimer()
 
 
-        if ((not Level1area1.tiles.collided_perfect(
+        if ((not Game.Game.currentLevel.tiles.collided_perfect(
                 Player.sprite) and not Player.jumping) or Player.groundLevelY > 0.1):
             Player.sprite.y += Player.fallSpeed * GameWindow.window.delta_time()
             Player.fallSpeed += 200 * GameWindow.window.delta_time()

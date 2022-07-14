@@ -6,17 +6,18 @@ import Levels
 allEnemies = []
 
 class Enemy():
-    def __init__(self, sprite=Sprite("sprites/player/right/julius-jumpmid-still-right.png", 2), health=100):
+    def __init__(self, positionX, positionY,sprite=Sprite("sprites/player/right/julius-jumpmid-still-right.png", 2), health=100):
         self.health = 100
         self.sprite = Sprite("sprites/player/right/julius-jumpmid-still-right.png", 2)
         self.sprite.set_sequence_time(0, 2, 40, True)
         self.posSet = False
-        self.level = Levels.Level1area1
         self.mostrarHealth = False
         self.mostrarHealthTimer = Misc.Timer()
         self.walking = False
         self.attack = False
         self.dead = False
+        self.initialPositionX = positionX
+        self.initialPositionY = positionY
 
         self.interval = 0.5
         self.increment = 0.05
@@ -24,30 +25,40 @@ class Enemy():
         self.show = True
         self.clock = 0
 
-    def spawn(self, positionX, positionY):
+        self.deathInterval = 3
+        self.deathTimer = Misc.Timer()
+        self.deathAnimationPlayed = False
+
+    def spawn(self):
+
+        self.deadState()
+        self.moveAccordingLevelScrolling(self.sprite)
+
+        if (not self.posSet):
+            # self.sprite = Sprite("sprites/enemies/devotee.png", 8)
+            # self.sprite.set_sequence_time(0, 8, 40, True)
+            self.sprite.set_position(self.initialPositionX, self.initialPositionY)
+            self.posSet = True
+
         if not self.dead:
-            self.sprite.draw()
-            self.sprite.update()
-            self.moveAccordingLevelScrolling(self.sprite)
+            #self.sprite.draw()
+            #self.sprite.update()
             self.collision()
-            self.kill()
             self.showHealth()
 
-            if (not self.posSet):
-                # self.sprite = Sprite("sprites/enemies/devotee.png", 8)
-                # self.sprite.set_sequence_time(0, 8, 40, True)
-                self.sprite.set_position(positionX, positionY)
-                self.posSet = True
+
 
     def move(self):
         self.sprite.x += 100 * GameWindow.window.delta_time()
 
     def moveAccordingLevelScrolling(self, sprite):
+        from Game import Game
+
         if (Pl.Player.direction == 2):
-            if (Pl.Player.sprite.x > self.level.scrollingLimit and not Pl.Player.still and not Pl.Player.collidedWall and not self.level.reachedLimitRight):
+            if (Pl.Player.sprite.x > Game.currentLevel.scrollingLimit and not Pl.Player.still and not Pl.Player.collidedWall and not Game.currentLevel.reachedLimitRight):
                 sprite.x -= Pl.Player.currentSpeed * GameWindow.window.delta_time()
         elif (Pl.Player.direction == 1):
-            if (Pl.Player.sprite.x < self.level.scrollingLimit and not Pl.Player.still and not Pl.Player.collidedWall and not self.level.reachedLimitLeft):
+            if (Pl.Player.sprite.x < Game.currentLevel.scrollingLimit and not Pl.Player.still and not Pl.Player.collidedWall and not Game.currentLevel.reachedLimitLeft):
                 sprite.x += Pl.Player.currentSpeed * GameWindow.window.delta_time()
 
     def collision(self):
@@ -77,7 +88,19 @@ class Enemy():
                 self.mostrarHealthTimer.stopTimer()
                 self.mostrarHealthTimer.resetTimer()
 
-    def kill(self):
+    def deadState(self):
         if(self.health <= 0):
             self.dead = True
+
+        if(self.dead and not self.deathAnimationPlayed):
+            self.deathTimer.resumeTimer()
+            self.deathTimer.executeTimer()
+
+            if (self.deathTimer.time >= self.deathInterval):
+                self.sprite.x += 9999
+                self.sprite.y -= 9999
+                self.deathAnimationPlayed = True
+                self.deathTimer.stopTimer()
+                self.deathTimer.resetTimer()
+
             #allEnemies.pop(self)
