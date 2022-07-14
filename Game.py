@@ -92,17 +92,17 @@ class Game:
             #GameWindow.window.draw_text(str(Game.devotee1.ready), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
             #GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
-            """ GameWindow.window.draw_text(str(Level1area1.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
+            GameWindow.window.draw_text(str(Level1area1.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"groundLevelY: {Player.groundLevelY}", 20, 190, 30,
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"groundLevelX: {Player.groundLevelX}", 20, 210, 30,
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(str(Player.sprite.rect.bottom), 20, 230, 30,
                                         [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Player.collidedGround), 20, 250, 30,
+            GameWindow.window.draw_text(f"collidedWall: {Player.collidedWall}", 20, 250, 30,
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"freefalling: {Player.freeFalling}", 20, 270, 30,
-                                        [255, 255, 255], "Arial") """
+                                        [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(f"Player.x: {Player.sprite.x}", 20, 290, 30,
                                         #[255, 255, 255], "Arial")
             #eGameWindow.window.draw_text(f"Player.y: {Player.sprite.y}", 20, 310, 30,
