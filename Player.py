@@ -8,6 +8,7 @@ from Levels import *
 from Input import *
 import pygame
 import Game
+from Enemy import Enemy, allEnemies
 
 class Player:
     health = 100
@@ -36,6 +37,7 @@ class Player:
     sprite.set_sequence_time(0, 14, 80, True)
     levelGroundFloor = 465
     sprite.set_position(200, 0)
+    #sprite.set_position(1000, 0)
     walkSpeed = 250
     dashSpeed = 600
     jumpSpeed = 1200
@@ -133,10 +135,23 @@ class Player:
         #JuliusAnim.setAnims()
         JuliusAnim.animationController()
 
+        @staticmethod
+        def verifyColissionEnemies(direction):
+            for enemy in allEnemies:
+                if direction == 1 and Player.sprite.x <= enemy.sprite.x and not(Player.sprite.y + Player.sprite.height <= enemy.sprite.y):
+                    return False
+                if direction == 2 and Player.sprite.x >= enemy.sprite.x and not(Player.sprite.y + Player.sprite.height <= enemy.sprite.y):
+                    return False
+            return True
+        """ @staticmethod
+        def verifyColissionEnemies(direction):
+            for enemy in allEnemies:
+                if Player.sprite.collided_perfect(enemy.sprite):
+                    return False """
 
-
+        
         ## WALKING
-        if(not Player.still and Player.direction == 2 and Player.standing and not Player.collidedWall):
+        if(not Player.still and Player.direction == 2 and Player.standing and not Player.collidedWall): #and verifyColissionEnemies(Player.direction)):
             if(Player.sprite.x < Level.scrollingLimit + 1 or Level.reachedLimitRight):
                 Player.sprite.x += Player.walkSpeed * GameWindow.window.delta_time()
 
@@ -146,7 +161,7 @@ class Player:
                     #Player.groundLevelX += Player.walkSpeed * GameWindow.window.delta_time()
 
 
-        elif(not Player.still and Player.direction == 1 and Player.standing and not Player.collidedWall):
+        elif(not Player.still and Player.direction == 1 and Player.standing and not Player.collidedWall): #and verifyColissionEnemies(Player.direction)):
             if(Player.sprite.x > Level.scrollingLimit - 1 or Level.reachedLimitLeft):
                 Player.sprite.x -= Player.walkSpeed * GameWindow.window.delta_time()
 
@@ -264,8 +279,6 @@ class Player:
             Player.collidedGround = True
         else:
             Player.collidedGround = False"""
-
-
 
 class JuliusAnim():
 
@@ -488,7 +501,3 @@ class JuliusAnim():
                     animation.playAnimation(Player.sprite, 20, JuliusAnim.animatedSprites)
                 elif(animation.activeFlipped):
                     animation.playAnimationFlipped(Player.sprite, 20, JuliusAnim.animatedSprites)
-
-
-
-
