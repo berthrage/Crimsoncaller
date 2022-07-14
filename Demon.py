@@ -28,7 +28,7 @@ class Demon(Enemy):
         self.animatedSprites.append(self.attackingAnim)
 
         self.dyingAnim = AnimatedSprite()
-        self.dyingAnim.addSprite("sprites/enemies/demon/death", 6)
+        self.dyingAnim.addSprite("sprites/enemies/demon/death", 10)
         self.animatedSprites.append(self.dyingAnim)
 
 
@@ -108,12 +108,12 @@ class Demon(Enemy):
             self.movController()
 
         elif self.dying('left') and self.tick >= 0:
-            self.dyingAnim.playAnimationFlipped(self.sprite, 6, self.animatedSprites)
+            self.dyingAnim.playAnimationFlipped(self.sprite, 10, self.animatedSprites)
             self.tick -= GameWindow.window.delta_time()
             #if self.dyingAnim.currentFrame >= 4:
             #    self.readyToDie = False
         elif self.dying('right') and self.tick >= 0:
-            self.dyingAnim.playAnimation(self.sprite, 6, self.animatedSprites)
+            self.dyingAnim.playAnimation(self.sprite, 10, self.animatedSprites)
             self.tick -= GameWindow.window.delta_time()
             #if self.dyingAnim.currentFrame >= 4:
             #    self.readyToDie = False

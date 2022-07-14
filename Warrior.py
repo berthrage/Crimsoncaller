@@ -68,21 +68,23 @@ class Warrior(Enemy):
                     self.walk = False
                     self.attack = True
                     self.sprite.x -= 25
+
         elif self.andando('right'):
             self.sprite.x += self.speed * GameWindow.window.delta_time()
-            if self.sprite.x >= Player.sprite.x:
+            if self.sprite.x >= Player.sprite.x - 100:
                 self.walk = False
                 self.attack = True
-                self.sprite.x += 25
+                #self.sprite.x += 25
 
         elif self.atacando('left'):
             if  not self.sprite.x <= Player.sprite.x + 100:
                     self.walk = True
                     self.attack = False
+
         elif self.atacando('right'):
             if not self.sprite.x >= Player.sprite.x - 100:
-                self.walk = False
-                self.attack = True
+                self.walk = True
+                self.attack = False
 
     def animationController(self):
         from Player import Player
@@ -103,10 +105,10 @@ class Warrior(Enemy):
             elif self.andando('right'):
                 self.walkingAnim.playAnimationFlipped(self.sprite, 7, self.animatedSprites)
 
-            if  self.direction == 'right' and self.sprite.x >= Player.sprite.x + 25:
+            if  self.direction == 'right' and self.sprite.x >= Player.sprite.x + 100:
                 self.direction = 'left'
 
-            elif self.direction == 'left' and self.sprite.x <= Player.sprite.x - 25:
+            elif self.direction == 'left' and self.sprite.x <= Player.sprite.x - 100:
                 self.direction = 'right'
             
             self.movController()
