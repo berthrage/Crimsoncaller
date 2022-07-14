@@ -3,6 +3,8 @@ from GameWindow import *
 import Player as Pl
 import Levels
 
+allEnemies = []
+
 class Enemy():
     def __init__(self, sprite=Sprite("sprites/player/right/julius-jumpmid-still-right.png", 2), health=100):
         self.health = 100
@@ -21,7 +23,7 @@ class Enemy():
         self.increment = 0.05
         self.step = 0.05
         self.show = True
-
+        self.clock = 0
 
     def spawn(self, positionX, positionY):
         if not self.dead:
@@ -54,10 +56,15 @@ class Enemy():
             self.health -= 25
             self.mostrarHealth = True
             self.ready = False
-            print('dano')
         else:
             if not Pl.Player.attacking:
                 self.ready = True
+
+        if self.sprite.collided_perfect(Pl.Player.sprite) and self.attack and self.clock <= 0 :
+            Pl.Player.health -= self.damage
+            self.clock = 1
+        else:
+            self.clock -= GameWindow.window.delta_time()
 
     def showHealth(self):
         if (self.mostrarHealth):
@@ -74,4 +81,4 @@ class Enemy():
     def kill(self):
         if(self.health <= 0):
             self.dead = True
-
+            #allEnemies.pop(self)

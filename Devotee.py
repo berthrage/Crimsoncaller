@@ -5,10 +5,11 @@ class Devotee(Enemy):
     def __init__(self, direction, health=50):
         super().__init__(health)
         self.health = health
-        self.dead = False
+        self.damage = 25
         self.sprite = Sprite("sprites/enemies/devotee2/1.png")
         self.direction = direction
         self.pray = True
+        self.attack = False
 
     animatedSprites = []
 

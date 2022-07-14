@@ -6,6 +6,9 @@ from Player import *
 import Warrior
 import MainMenu
 import Devotee
+import Cerbero
+import Demon
+from Enemy import allEnemies
 
 class Game:
     name = "Game"
@@ -21,17 +24,33 @@ class Game:
     def executeGame():
         warrior1 = Warrior.Warrior('left')
         devotee1 = Devotee.Devotee('left')
+        cerbero1 = Cerbero.Cerbero('left')
+        demon1 = Demon.Demon('left')
+        demon2 = Demon.Demon('right')
+        #allEnemies.append(devotee1)
+        allEnemies.append(demon1)
+        #allEnemies.append(warrior1)
 
         while True:
             GameWindow.window.set_background_color(Game.windowColor)
             Input.inputHandler()
 
             Levels.spawnLevel(Game.currentLevel)
-            warrior1.spawn(900, 450)
-            warrior1.animationController(warrior1)
-            devotee1.spawn(GameWindow.window.width/2 - devotee1.sprite.width/2, 200)
-            devotee1.animationController(devotee1)
 
+            #warrior1.spawn(900, GameWindow.window.height - warrior1.sprite.height - 60)
+            #warrior1.animationController(warrior1)
+
+            #devotee1.spawn(GameWindow.window.width/2 - devotee1.sprite.width/2, 200)
+            #devotee1.animationController(devotee1)
+
+            demon1.spawn(900, GameWindow.window.height - demon1.sprite.height)
+            demon1.animationController(demon1)
+
+            #demon2.spawn(0, GameWindow.window.height - demon1.sprite.height)
+            #demon2.animationController(demon2)
+
+            #cerbero1.spawn(900, 480)
+            #cerbero1.animationController(cerbero1)
 
             #Player.spawnJulius()
             Player.controlJulius(Game.currentLevel)
