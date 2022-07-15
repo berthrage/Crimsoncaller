@@ -16,6 +16,8 @@ class Enemy():
         self.walking = False
         self.attack = False
         self.dead = False
+        self.patrolling = False
+        self.detected = False
         self.initialPositionX = positionX
         self.initialPositionY = positionY
 

@@ -112,6 +112,10 @@ class Player:
 
         if(Player.standing and Input.getKeyDown("i") and Player.attackOffCooldown):
             Player.attacking = True
+            if Player.direction == 1:
+                Player.sprite.x  -= 25
+            else:
+                Player.sprite.x += 25
             Player.attackOffCooldown = False
         if(Player.attacking):
             Player.attackingTimer.resumeTimer()
@@ -204,7 +208,7 @@ class Player:
 
         Player.scrollLevel(Game.Game.currentLevel)
         Player.setGravity()
-        Player.setCollision()
+        #Player.setCollision()
 
     @staticmethod
     def setCollision():

@@ -2,7 +2,7 @@ from Enemy import *
 from Animations import AnimatedSprite
 
 class Devotee(Enemy):
-    def __init__(self, positionX, positionY, direction='left', health=50):
+    def __init__(self, positionX, positionY, direction='left', health=200):
         super().__init__(positionX, positionY, health)
         self.health = health
         self.damage = 25
