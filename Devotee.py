@@ -2,7 +2,7 @@ from Enemy import *
 from Animations import AnimatedSprite
 
 class Devotee(Enemy):
-    def __init__(self, positionX, positionY, direction='left', health=200):
+    def __init__(self, positionX, positionY, direction='left', health=100):
         super().__init__(positionX, positionY, health)
         self.health = health
         self.damage = 25
@@ -26,8 +26,11 @@ class Devotee(Enemy):
             return False
 
     def animationController(self):
+        from Player import Player
         if not self.dead:
             if self.praying('left'):
                 self.prayAnim.playAnimation(self.sprite, 8, self.animatedSprites)
             elif self.praying('right'):
                 self.prayAnim.playAnimationFlipped(self.sprite, 8, self.animatedSprites)
+            if self.health <= 0:
+                Player.health += 10

@@ -12,7 +12,7 @@ class Demon(Enemy):
         self.damage = 25
         self.direction = direction
         self.detected = False
-        self.patrolling = True
+        self.esperando = True
         self.walk = False
         self.attack = False
         self.readyToDie = True
@@ -33,18 +33,15 @@ class Demon(Enemy):
         self.dyingAnim.addSprite("sprites/enemies/demon/death", 10)
         self.animatedSprites.append(self.dyingAnim)
 
-    def patrulhando(self, direction):
-        if (self.direction == direction and
-            self.patrolling):
-            return True
-        else:
-            return False
+        self.esperandoAnim = AnimatedSprite()
+        self.esperandoAnim.addSprite('sprites/enemies/demon/walking', 1)
+        self.animatedSprites.append(self.esperandoAnim)
 
     def detectado(self):
         from Player import Player
-        if (self.sprite.x - Player.sprite.x <= 250):
+        if (self.sprite.x - Player.sprite.x <= 500):
             self.detected = True
-            self.patrolling = False
+            self.esperando = False
             self.walk = True
 
     def andando(self, direction):
@@ -74,55 +71,44 @@ class Demon(Enemy):
     def movController(self):
         from Player import Player
 
-        if not self.detected:
+        if self.esperando:
             self.detectado()
-            if self.patrulhando('left'):
-                print(self.initialPositionX - self.sprite.x)
-                if self.initialPositionX - self.sprite.x <= 200:
-                    self.sprite.x -= GameWindow.window.delta_time() * self.speed
-                else:
-                    print('entrou right')
-                    self.direction = 'right'
-            elif self.patrulhando('right'):
-                if self.initialPositionX >= self.sprite.x:
-                    self.sprite.x += GameWindow.window.delta_time() * self.speed
-                else:
-                    self.direction = 'left'
+        
+        elif self.andando('left'):
+            self.sprite.x -= GameWindow.window.delta_time() * self.speed
+            if self.sprite.x <= Player.sprite.x - 25 :
+                self.walk = False
+                self.attack = True
+                self.sprite.x += 25
 
-        else:
-            if self.andando('left'):
-                self.sprite.x -= GameWindow.window.delta_time() * self.speed
-                if self.sprite.x <= Player.sprite.x - 25 :
-                    self.walk = False
-                    self.attack = True
-                    self.sprite.x += 25
+        elif self.andando('right'):
+            self.sprite.x += GameWindow.window.delta_time() * self.speed
+            if self.sprite.x >= Player.sprite.x - 100 :
+                self.walk = False
+                self.attack = True
+                self.sprite.x -= 25
 
-            elif self.andando('right'):
-                self.sprite.x += GameWindow.window.delta_time() * self.speed
-                if self.sprite.x >= Player.sprite.x - 100 :
-                    self.walk = False
-                    self.attack = True
-                    self.sprite.x -= 25
+        elif self.atacando('left'):
+            if not (self.sprite.x <= Player.sprite.x ) :
+                self.attack = False
+                self.walk = True
 
-            elif self.atacando('left'):
-                if not (self.sprite.x <= Player.sprite.x ) :
-                    self.attack = False
-                    self.walk = True
-
-            elif self.atacando('right'):
-                if not (self.sprite.x >= Player.sprite.x - 150):
-                    self.attack = False
-                    self.walk = True
-
+        elif self.atacando('right'):
+            if not (self.sprite.x >= Player.sprite.x - 150):
+                self.attack = False
+                self.walk = True
 
     def animationController(self):
         from Player import Player
 
         if not self.dead:
+            
+            if self.esperando:
+                self.esperandoAnim.playAnimationFlipped(self.sprite, 1, self.animatedSprites)
 
-            if self.andando('left') or (self.patrolling and self.direction == 'left'):
+            elif self.andando('left'):
                 self.walkingAnim.playAnimationFlipped(self.sprite, 6, self.animatedSprites)
-            elif self.andando('right') or (self.patrolling and self.direction == 'right'):
+            elif self.andando('right'):
                 self.walkingAnim.playAnimation(self.sprite, 6, self.animatedSprites)
             
             elif self.atacando('left'):
@@ -136,13 +122,13 @@ class Demon(Enemy):
             elif self.direction == 'left' and self.sprite.x <= Player.sprite.x - 25:
                 self.direction = 'right'
 
-            GameWindow.window.draw_text(str(f'detectado: {self.detected}'), 20, 170, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(f'direcao: {self.direction}'), 20, 200, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(f'posicao inicial: {self.initialPositionX}'), 20, 260, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(f'posicao atual: {self.sprite.x}'), 20, 290, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(f'patrulhando: {self.patrolling}'), 20, 320, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(f'andando: {self.walk}'), 20, 350, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(f'atacando: {self.attack}'), 20, 380, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'posx: {self.sprite.x}'), 20, 170, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'direcao: {self.direction}'), 20, 200, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'posicao inicial: {self.initialPositionX}'), 20, 260, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'posicao atual: {self.sprite.x}'), 20, 290, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'patrulhando: {self.patrolling}'), 20, 320, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'andando: {self.walk}'), 20, 350, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'atacando: {self.attack}'), 20, 380, 30, [255, 255, 255], "Arial")
             self.movController()
 
         elif self.dying('left') and self.tick >= 0:

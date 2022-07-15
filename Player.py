@@ -36,7 +36,7 @@ class Player:
     sprite = Sprite("sprites/player/right/julius-idle/1.png")
     sprite.set_sequence_time(0, 14, 80, True)
     levelGroundFloor = 465
-    sprite.set_position(200, 0)
+    sprite.set_position(5, 0)
     #sprite.set_position(1000, 0)
     walkSpeed = 250
     dashSpeed = 600

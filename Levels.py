@@ -46,12 +46,14 @@ class Level1area1(Level):
 
     def createEnemies(self):
         from Game import Game
-        #self.enemies.append(Warrior(1700 + Game.currentLevel.tiles.x, 325))
-        #self.enemies.append(Warrior(700, 325))
-        #self.enemies.append(Devotee(600 + Game.currentLevel.tiles.x, 465))
-        #self.enemies.append(Devotee(800 + Game.currentLevel.tiles.x, 465))
+        self.enemies.append(Devotee(450 + Game.currentLevel.tiles.x, 210))
         #self.enemies.append(Demon(900 + Game.currentLevel.tiles.x, 465))
-        self.enemies.append(Dragon(900 + Game.currentLevel.tiles.x, 465))
+        self.enemies.append(Warrior(1900 + Game.currentLevel.tiles.x, 325))
+
+
+        #self.enemies.append(Warrior(700, 325))
+        #self.enemies.append(Devotee(800 + Game.currentLevel.tiles.x, 465))
+        self.enemies.append(Dragon(1900 + Game.currentLevel.tiles.x, 465))
 
 class Level1area2(Level):
     def __init__(self):
@@ -61,5 +63,24 @@ class Level1area2(Level):
 
     def createEnemies(self):
         from Game import Game
-        #self.enemies.append(Warrior(1700 + Game.currentLevel.tiles.x, 325))
+        self.enemies.append(Warrior(2000 + Game.currentLevel.tiles.x, 325))
+        self.enemies.append(Dragon(3000 + Game.currentLevel.tiles.x, 460))
         self.enemies.append(Devotee(280, 150))
+        self.enemies.append(Demon(1200, 460))
+        self.enemies.append(Devotee(1800, 50))
+        self.enemies.append(Dragon(450, 460))
+
+class Level1area3(Level):
+    def __init__(self):
+        super().__init__()
+        self.background = Sprite("sprites/maps/1-3/1-3-background.png")
+        self.tiles = Sprite("sprites/maps/1-3/1-3-tiles.png")
+
+
+    def createEnemies(self):
+        from Game import Game
+        self.enemies.append(Demon(350, 470))
+        self.enemies.append(Dragon(800, 470))
+        self.enemies.append(Demon(1200, 470))
+        self.enemies.append(Demon(1800, 470))
+        

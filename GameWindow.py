@@ -19,5 +19,5 @@ class GameWindow:
     sound.play()
 
 GameWindow.window.set_title("Crimsoncaller")
-#GameWindow.window.set_fullscreen()
+GameWindow.window.set_fullscreen()
 
