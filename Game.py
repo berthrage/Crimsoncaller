@@ -79,9 +79,9 @@ class Game:
             if Game.readyToWin and Player.sprite.x >= GameWindow.window.width:
                 Game.executeWinScreen()
 
-            GameWindow.window.draw_text(f"px: {Player.sprite.x}", GameWindow.window.width/2, 0, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
-            GameWindow.window.draw_text(f"gw: {GameWindow.window.width - 10}", GameWindow.window.width/2, 100, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
-            GameWindow.window.draw_text(f"rw: {Game.readyToWin}", GameWindow.window.width/2, 200, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(f"px: {Player.sprite.x}", GameWindow.window.width/2, 0, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(f"gw: {GameWindow.window.width - 10}", GameWindow.window.width/2, 100, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(f"rw: {Game.readyToWin}", GameWindow.window.width/2, 200, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
 
     @staticmethod
     def transitionLevel(playerX, playerY, levelX=0):
