@@ -53,6 +53,8 @@ class Game:
             #print(warrior1.image.collided_perfect(Player.sprite))
 
             Game.backtoMainMenu()
+            #GameWindow.window.draw_text(str(f'posx: {Player.sprite.x}'), 20, 170, 30, [255, 255, 255], "Arial")
+            #GameWindow.window.draw_text(str(f'posy: {Player.sprite.y}'), 20, 200, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(JuliusAnim.idle1_right), 20, 60, 30, [255, 255, 255], "Arial")
            # GameWindow.window.draw_text(str(JuliusAnim.idle1_left), 20, 90, 30, [255, 255, 255], "Arial")
@@ -78,8 +80,8 @@ class Game:
             #GameWindow.window.draw_text(str(Game.devotee1.ready), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
             #GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
             #GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Game.currentLevel.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"groundLevelY: {Player.groundLevelY}", 20, 190, 30,
+            #GameWindow.window.draw_text(str(Game.currentLevel.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
+            """ GameWindow.window.draw_text(f"groundLevelY: {Player.groundLevelY}", 20, 190, 30,
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"groundLevelX: {Player.groundLevelX}", 20, 210, 30,
                                         [255, 255, 255], "Arial")
@@ -96,7 +98,7 @@ class Game:
             GameWindow.window.draw_text(f"level tiles x: {Game.currentLevel.tiles.x}", 20, 330, 30,
                                         [255, 255, 255], "Arial")
             GameWindow.window.draw_text(f"level bg x: {Game.currentLevel.background.x}", 20, 350, 30,
-                                        [255, 255, 255], "Arial")
+                                        [255, 255, 255], "Arial") """
 
 
             #GameWindow.window.draw_text(f"Demon1 x: : {demon1.sprite.x}", 20, 290, 30,
@@ -123,7 +125,7 @@ class Game:
             #outlinePlayer = Player.sprite.mask.outline()
             #pygame.draw.lines(Player.sprite.image, (255, 0, 0), True, outlinePlayer)
 
-
+            #Game.lose()
             Game.showFrameRate()
             GameWindow.window.update()
 
@@ -187,3 +189,18 @@ class Game:
 
         GameWindow.window.draw_text("FPS: " + str(int(Game.frameRate)), 1200, 10, 15, [255, 234, 0], "Arial", True)
 
+    @staticmethod
+    def executeLoseScreen():
+        while True:
+            GameWindow.window.set_background_color(Game.windowColor)
+            GameWindow.window.draw_text("DEAD", GameWindow.window.width/2, GameWindow.window.height,
+                 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            Game.backtoMainMenu()
+            GameWindow.window.update()
+
+
+    @staticmethod
+    def lose():
+        if Player.health <= 0:
+            return Game.executeLoseScreen()
+        

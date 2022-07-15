@@ -57,7 +57,7 @@ class Warrior(Enemy):
     def movController(self):
         from Player import Player
         if self.start:
-            if self.startAnim.currentFrame >= 4:
+            if self.startAnim.currentFrame >= 7:
                 self.start = False
                 self.walk = True
 
@@ -71,10 +71,9 @@ class Warrior(Enemy):
 
         elif self.andando('right'):
             self.sprite.x += self.speed * GameWindow.window.delta_time()
-            if self.sprite.x >= Player.sprite.x - 100:
+            if self.sprite.x + self.sprite.width >= Player.sprite.x:
                 self.walk = False
                 self.attack = True
-                #self.sprite.x += 25
 
         elif self.atacando('left'):
             if  not self.sprite.x <= Player.sprite.x + 100:

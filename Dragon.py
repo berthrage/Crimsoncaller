@@ -4,7 +4,7 @@ from PPlay.sprite import *
 from GameWindow import *
 from Enemy import allEnemies
 
-class Demon(Enemy):
+class Dragon(Enemy):
     def __init__(self, positionX, positionY, direction='left', health=100):
         super().__init__(positionX, positionY, health)
         self.health = health
@@ -16,22 +16,26 @@ class Demon(Enemy):
         self.walk = False
         self.attack = False
         self.readyToDie = True
-        self.sprite = Sprite("sprites/enemies/demon/walking/1.png")
+        self.sprite = Sprite("sprites/enemies/dragon/walking/1.png")
         self.tick = 1
 
         self.animatedSprites = []
 
         self.walkingAnim = AnimatedSprite()
-        self.walkingAnim.addSprite("sprites/enemies/demon/walking", 6)
+        self.walkingAnim.addSprite("sprites/enemies/dragon/walking", 5)
         self.animatedSprites.append(self.walkingAnim)
 
         self.attackingAnim = AnimatedSprite()
-        self.attackingAnim.addSprite("sprites/enemies/demon/attacking", 4)
+        self.attackingAnim.addSprite("sprites/enemies/dragon/attacking", 4)
         self.animatedSprites.append(self.attackingAnim)
 
         self.dyingAnim = AnimatedSprite()
-        self.dyingAnim.addSprite("sprites/enemies/demon/death", 10)
+        self.dyingAnim.addSprite("sprites/enemies/dragon/death", 5)
         self.animatedSprites.append(self.dyingAnim)
+
+        self.hurtAnim = AnimatedSprite()
+        self.hurtAnim.addSprite("sprites/enemies/dragon/hurt", 2)
+        self.animatedSprites.append(self.hurtAnim)
 
     def patrulhando(self, direction):
         if (self.direction == direction and
@@ -69,7 +73,6 @@ class Demon(Enemy):
             return True
         else:
             return False
-
 
     def movController(self):
         from Player import Player
@@ -114,16 +117,15 @@ class Demon(Enemy):
                     self.attack = False
                     self.walk = True
 
-
     def animationController(self):
         from Player import Player
 
         if not self.dead:
 
             if self.andando('left') or (self.patrolling and self.direction == 'left'):
-                self.walkingAnim.playAnimationFlipped(self.sprite, 6, self.animatedSprites)
+                self.walkingAnim.playAnimationFlipped(self.sprite, 5, self.animatedSprites)
             elif self.andando('right') or (self.patrolling and self.direction == 'right'):
-                self.walkingAnim.playAnimation(self.sprite, 6, self.animatedSprites)
+                self.walkingAnim.playAnimation(self.sprite, 5, self.animatedSprites)
             
             elif self.atacando('left'):
                 self.attackingAnim.playAnimationFlipped(self.sprite, 4, self.animatedSprites)
@@ -146,12 +148,12 @@ class Demon(Enemy):
             self.movController()
 
         elif self.dying('left') and self.tick >= 0:
-            self.dyingAnim.playAnimationFlipped(self.sprite, 10, self.animatedSprites)
+            self.dyingAnim.playAnimationFlipped(self.sprite, 5, self.animatedSprites)
             self.tick -= GameWindow.window.delta_time()
             #if self.dyingAnim.currentFrame >= 4:
             #    self.readyToDie = False
         elif self.dying('right') and self.tick >= 0:
-            self.dyingAnim.playAnimation(self.sprite, 10, self.animatedSprites)
+            self.dyingAnim.playAnimation(self.sprite, 5, self.animatedSprites)
             self.tick -= GameWindow.window.delta_time()
             #if self.dyingAnim.currentFrame >= 4:
             #    self.readyToDie = False
