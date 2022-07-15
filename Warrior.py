@@ -9,9 +9,11 @@ class Warrior(Enemy):
         super().__init__(positionX, positionY, health)
         self.health = health
         self.speed = 150
-        self.damage = 25
+        self.damage = 10
         self.direction = direction
-        self.start = True
+        self.detected = False
+        self.esperando = True
+        self.start = False
         self.walk = False
         self.attack = False
         self.sprite = Sprite("sprites/enemies/warrior/left/starting/1.png")
@@ -30,6 +32,13 @@ class Warrior(Enemy):
         self.attackingAnim.addSprite("sprites/enemies/warrior/left/attacking", 5)
         self.animatedSprites.append(self.attackingAnim)
 
+
+    def detectado(self):
+        from Player import Player
+        if (self.sprite.x - Player.sprite.x <= 350):
+            self.detected = True
+            self.esperando = False
+            self.walk = True
 
     def starting(self, direction):
         if (self.direction == direction and
@@ -56,7 +65,11 @@ class Warrior(Enemy):
 
     def movController(self):
         from Player import Player
-        if self.start:
+
+        if self.esperando:
+            self.detectado()
+
+        elif self.start:
             if self.startAnim.currentFrame >= 7:
                 self.start = False
                 self.walk = True
@@ -89,7 +102,10 @@ class Warrior(Enemy):
         from Player import Player
         if not self.dead:
 
-            if self.starting('left'):
+            if self.esperando:
+                self.sprite.draw()
+
+            elif self.starting('left'):
                 self.startAnim.playAnimation(self.sprite, 8, self.animatedSprites)
             elif self.starting('right'):
                 self.startAnim.playAnimationFlipped(self.sprite, 8, self.animatedSprites)
@@ -103,6 +119,9 @@ class Warrior(Enemy):
                 self.walkingAnim.playAnimation(self.sprite, 7, self.animatedSprites)
             elif self.andando('right'):
                 self.walkingAnim.playAnimationFlipped(self.sprite, 7, self.animatedSprites)
+
+            else:
+                self.startAnim.playAnimation(self.sprite, 8, self.animatedSprites)
 
             if  self.direction == 'right' and self.sprite.x >= Player.sprite.x + 100:
                 self.direction = 'left'

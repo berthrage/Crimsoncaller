@@ -19,12 +19,15 @@ class Game:
     gameLoops = 0
     frameRate = 0
     currentLevel = Level1area1()
+    #currentLevel = Level1area2()
+    #currentLevel = Level1area3()
     transitioningLevel = False
     intervalTransitionLevel = 0.05
     transitionLevelTimer = Misc.Timer()
     levelToTransition = Level1area1()
     levelToTransitionPlayerPos = [0, 0]
-
+    level3defeat = 0
+    readyToWin = False
 
     @staticmethod
     def executeGame():
@@ -38,94 +41,10 @@ class Game:
             Game.handleLevels()
             #Player.spawnJulius()
             Player.controlJulius(Game.currentLevel)
-
-            """ if Game.warrior1.health > 0:
-                Game.warrior1.update_sprite()
-                Warrior.combat(Game.warrior1) """
-
-            #warrior1.update_sprite()
-
-
-            '''if Game.devotee1.health > 0:
-                Game.devotee1.update_sprite()
-                Devotee.collision(Game.devotee1)'''
-
-            #print(warrior1.image.collided_perfect(Player.sprite))
-
             Game.backtoMainMenu()
-            #GameWindow.window.draw_text(str(f'posx: {Player.sprite.x}'), 20, 170, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(f'posy: {Player.sprite.y}'), 20, 200, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(JuliusAnim.timeElapsed), 20, 20, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(JuliusAnim.idle1_right), 20, 60, 30, [255, 255, 255], "Arial")
-           # GameWindow.window.draw_text(str(JuliusAnim.idle1_left), 20, 90, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Level1area1.reachedLimitLeft), 20, 90, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Level1area1.reachedLimitRight), 20, 110, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Level1area1.tiles.x), 20, 130, 30, [255, 255, 255], "Arial")
-
-            #GameWindow.window.draw_text(str(Player.jumping), 20, 90, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Player.jumpingTimer.time), 20, 110, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Player.jumpSpeed), 20, 130, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Player.jumpSpeedDivision), 20, 150, 30, [255, 255, 255], "Arial")
-
-
-
-            """ GameWindow.window.draw_text(f"falling: {Player.falling}", 20, 90, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"grounded: {Player.grounded}", 20, 110, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Player.currentSpeed), 20, 130, 30, [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(devotee1.posSet), 20, 150, 30, [255, 255, 255], "Arial") """
-
             Game.HUD.renderHUD()
-
-            #GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
-            #GameWindow.window.draw_text(str(Game.devotee1.ready), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
-            #GameWindow.window.draw_text(str(Player.falling), 20, 90, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Player.grounded), 20, 110, 30, [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(str(Game.currentLevel.tiles.collided_perfect(Player.sprite)), 20, 170, 30, [255, 255, 255], "Arial")
-            """ GameWindow.window.draw_text(f"groundLevelY: {Player.groundLevelY}", 20, 190, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"groundLevelX: {Player.groundLevelX}", 20, 210, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(str(Player.sprite.rect.bottom), 20, 230, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"collidedWall: {Player.collidedWall}", 20, 250, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"freefalling: {Player.freeFalling}", 20, 270, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"transitionLevelTime: {Game.transitionLevelTimer.time}", 20, 290, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"transitioningLevel: {Game.transitioningLevel}", 20, 310, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"level tiles x: {Game.currentLevel.tiles.x}", 20, 330, 30,
-                                        [255, 255, 255], "Arial")
-            GameWindow.window.draw_text(f"level bg x: {Game.currentLevel.background.x}", 20, 350, 30,
-                                        [255, 255, 255], "Arial") """
-
-
-            #GameWindow.window.draw_text(f"Demon1 x: : {demon1.sprite.x}", 20, 290, 30,
-                                       # [255, 255, 255], "Arial")
-            #GameWindow.window.draw_text(f"Player.x: {Player.sprite.x}", 20, 290, 30,
-                                        #[255, 255, 255], "Arial")
-            #eGameWindow.window.draw_text(f"Player.y: {Player.sprite.y}", 20, 310, 30,
-                                        #[255, 255, 255], "Arial")
-
-            #GameWindow.window.draw_text(f"collidedWall: {Player.collidedWall}", 20, 330, 30, [255, 255, 255], "Arial")
-
-            #GameWindow.window.draw_text(str(Player.sprite.mask.get_size()), 20, 130, 30, [255, 255, 255], "Arial")
-            #Player.sprite.mask = pygame.mask.from_surface(Player.sprite.image, 127)
-
-            """mask1 = pygame.mask.from_surface(Player.sprite.image)
-            mask2 = pygame.mask.from_surface(Level1area1.tiles.image)
-
-            olist = mask1.outline()
-            olist2 = mask2.outline()
-
-            pygame.draw.lines(Player.sprite.image, (255,0,0), True, olist)
-            pygame.draw.lines(Level1area1.tiles.image, (255, 255, 255), True, olist2)"""
-
-            #outlinePlayer = Player.sprite.mask.outline()
-            #pygame.draw.lines(Player.sprite.image, (255, 0, 0), True, outlinePlayer)
-
-            #Game.lose()
+            Game.lose()
+            Game.win()
             Game.showFrameRate()
             GameWindow.window.update()
 
@@ -137,13 +56,32 @@ class Game:
                 Game.transitionLevel(0, 300)
                 if(Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.03):
                     Game.levelToTransition = Level1area2()
+            elif Player.sprite.x <= 0:
+                Player.sprite.x = 5
 
         elif(isinstance(Game.currentLevel, Level1area2)):
             if(Player.sprite.x < 0):
-                Game.transitionLevel(1150, 200, -1280)
+                Player.sprite.x = 10
+                """ Game.transitionLevel(1150, 200, -1280)
                 if (Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.03):
-                    Game.levelToTransition = Level1area1()
+                    Game.levelToTransition = Level1area1() """
 
+            elif(Player.sprite.x > GameWindow.window.width - 75):
+                Game.transitionLevel(0, 300)
+                if(Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.03):
+                    Game.levelToTransition = Level1area3()
+
+        elif (isinstance(Game.currentLevel, Level1area3)):
+            if Player.sprite.x <= 0:
+                Player.sprite.x = 5
+            if (not Game.readyToWin) and Player.sprite.x >= GameWindow.window.width - 80:
+                Player.sprite.x = GameWindow.window.width - 85
+            if Game.readyToWin and Player.sprite.x >= GameWindow.window.width:
+                Game.executeWinScreen()
+
+            #GameWindow.window.draw_text(f"px: {Player.sprite.x}", GameWindow.window.width/2, 0, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(f"gw: {GameWindow.window.width - 10}", GameWindow.window.width/2, 100, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            #GameWindow.window.draw_text(f"rw: {Game.readyToWin}", GameWindow.window.width/2, 200, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
 
     @staticmethod
     def transitionLevel(playerX, playerY, levelX=0):
@@ -153,7 +91,8 @@ class Game:
         Game.transitioningLevel = True
         if (Game.transitionLevelTimer.time >= Game.intervalTransitionLevel - 0.01):
             Game.currentLevel = Game.levelToTransition
-            Player.sprite.set_position(playerX, playerY)
+            #Player.sprite.set_position(playerX, playerY)
+            Player.sprite.set_position(0, 0)
             Game.currentLevel.tiles.x = levelX
             Game.currentLevel.background.x = levelX / 2
 
@@ -191,10 +130,12 @@ class Game:
 
     @staticmethod
     def executeLoseScreen():
+        loseSprite = Sprite('sprites/menu_old/lose.png')
         while True:
             GameWindow.window.set_background_color(Game.windowColor)
             GameWindow.window.draw_text("DEAD", GameWindow.window.width/2, GameWindow.window.height,
                  90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            loseSprite.draw()
             Game.backtoMainMenu()
             GameWindow.window.update()
 
@@ -203,4 +144,28 @@ class Game:
     def lose():
         if Player.health <= 0:
             return Game.executeLoseScreen()
-        
+        if not (isinstance(Game.currentLevel, Level1area3)) and (Player.sprite.y >= GameWindow.window.height + Player.sprite.height):
+            return Game.executeLoseScreen()
+
+    @staticmethod
+    def executeWinScreen():
+        winSprite = Sprite('sprites/menu_old/win.png')
+        while True:
+            GameWindow.window.set_background_color(Game.windowColor)
+            GameWindow.window.draw_text("WIN", GameWindow.window.width/2, GameWindow.window.height,
+                 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False, False, False)
+            winSprite.draw()
+            Game.backtoMainMenu()
+            GameWindow.window.update()
+
+    @staticmethod
+    def win():
+        mortos = 0
+        if (isinstance(Game.currentLevel, Level1area3)):
+            for i in Game.currentLevel.enemies:
+                if i.health <= 0:
+                    mortos += 1
+            if mortos >= 4:
+                Game.readyToWin = True
+            else:
+                return

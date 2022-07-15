@@ -11,7 +11,8 @@ class HUD:
         from Game import Game
         GameWindow.window.draw_text(str(Player.health), 40, 60, 90, [255, 0, 0], "fonts/AncientModernTales.ttf", False,
                                     False, False)
-
+        GameWindow.window.draw_text("Press I to attack", 40, 180, 30, [255, 0, 0], "fonts/AncientModernTales.ttf", False,
+                                    False, False)
 
         if(Game.transitioningLevel):
             self.blackscreensprite.draw()
